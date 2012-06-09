@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="AbstractBotSherpa.cs" />
     <Compile Include="Bots\TestBot.cs" />
+    <Compile Include="Common\DebugMonitor.cs" />
     <Compile Include="Common\GoldMonitor.cs" />
     <Compile Include="Bots\Sarkoth.cs" />
     <Compile Include="Classes\DemonHunter.cs" />
@@ -91,6 +92,12 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DebugUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\DebugUI.Designer.cs">
+      <DependentUpon>DebugUI.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\MainUI.cs">
       <SubType>Form</SubType>
@@ -131,6 +138,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\DebugUI.resx">
+      <DependentUpon>DebugUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MainUI.resx">
       <DependentUpon>MainUI.cs</DependentUpon>
