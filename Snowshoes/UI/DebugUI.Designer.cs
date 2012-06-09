@@ -32,6 +32,11 @@
             this.txtX = new System.Windows.Forms.TextBox();
             this.txtY = new System.Windows.Forms.TextBox();
             this.btnAdd = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.txtLevelArea = new System.Windows.Forms.TextBox();
+            this.txtQuestID = new System.Windows.Forms.TextBox();
+            this.txtQuestStep = new System.Windows.Forms.TextBox();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.SuspendLayout();
             // 
             // lstCoordinates
@@ -39,7 +44,7 @@
             this.lstCoordinates.FormattingEnabled = true;
             this.lstCoordinates.Location = new System.Drawing.Point(195, 12);
             this.lstCoordinates.Name = "lstCoordinates";
-            this.lstCoordinates.Size = new System.Drawing.Size(146, 121);
+            this.lstCoordinates.Size = new System.Drawing.Size(146, 186);
             this.lstCoordinates.TabIndex = 0;
             // 
             // txtX
@@ -51,14 +56,14 @@
             // 
             // txtY
             // 
-            this.txtY.Location = new System.Drawing.Point(21, 49);
+            this.txtY.Location = new System.Drawing.Point(21, 38);
             this.txtY.Name = "txtY";
             this.txtY.Size = new System.Drawing.Size(155, 20);
             this.txtY.TabIndex = 2;
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(21, 84);
+            this.btnAdd.Location = new System.Drawing.Point(21, 149);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(64, 49);
             this.btnAdd.TabIndex = 3;
@@ -66,11 +71,46 @@
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(112, 149);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(64, 49);
+            this.btnSave.TabIndex = 4;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // txtLevelArea
+            // 
+            this.txtLevelArea.Location = new System.Drawing.Point(21, 64);
+            this.txtLevelArea.Name = "txtLevelArea";
+            this.txtLevelArea.Size = new System.Drawing.Size(155, 20);
+            this.txtLevelArea.TabIndex = 5;
+            // 
+            // txtQuestID
+            // 
+            this.txtQuestID.Location = new System.Drawing.Point(21, 90);
+            this.txtQuestID.Name = "txtQuestID";
+            this.txtQuestID.Size = new System.Drawing.Size(155, 20);
+            this.txtQuestID.TabIndex = 6;
+            // 
+            // txtQuestStep
+            // 
+            this.txtQuestStep.Location = new System.Drawing.Point(21, 116);
+            this.txtQuestStep.Name = "txtQuestStep";
+            this.txtQuestStep.Size = new System.Drawing.Size(155, 20);
+            this.txtQuestStep.TabIndex = 7;
+            // 
             // DebugUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(362, 156);
+            this.ClientSize = new System.Drawing.Size(362, 210);
+            this.Controls.Add(this.txtQuestStep);
+            this.Controls.Add(this.txtQuestID);
+            this.Controls.Add(this.txtLevelArea);
+            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.txtY);
             this.Controls.Add(this.txtX);
@@ -88,6 +128,11 @@
         public System.Windows.Forms.TextBox txtX;
         public System.Windows.Forms.TextBox txtY;
         private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Button btnSave;
+        public System.Windows.Forms.TextBox txtLevelArea;
+        public System.Windows.Forms.TextBox txtQuestID;
+        public System.Windows.Forms.TextBox txtQuestStep;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
 
 
     }

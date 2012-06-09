@@ -80,6 +80,7 @@
     <Compile Include="Common\SnagIt.cs" />
     <Compile Include="Common\Spell.cs" />
     <Compile Include="Common\Watchdog.cs" />
+    <Compile Include="Common\Waypoint.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -11,6 +11,9 @@ namespace Snowshoes.Common
     {
         private float _x;
         private float _y;
+        private SNOQuestId _questId;
+        private int _questStep;
+        private SNOLevelArea _levelArea;
         private UI.DebugUI _debugWindow;
 
         public DebugMonitor(int delay, UI.DebugUI debugWindow) : base(delay)
@@ -33,6 +36,9 @@ namespace Snowshoes.Common
             bool changed = changed = (_x != Me.X || _y != Me.Y);
             _x = Me.X;
             _y = Me.Y;
+            _levelArea = Me.LevelArea;
+            _questId = Me.QuestId;
+            _questStep = Me.QuestStep;
             return changed;
         }
     }
