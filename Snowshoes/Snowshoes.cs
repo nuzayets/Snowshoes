@@ -42,7 +42,7 @@ namespace Snowshoes
 
             Game.OnTickEvent += new TickEventHandler(Game_OnTickEvent);
 
-            new AddOns.GoldMonitor(500);
+            new Common.GoldMonitor(500);
             new Bots.Sarkoth();
         }
 
