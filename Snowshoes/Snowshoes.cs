@@ -19,7 +19,7 @@ namespace Snowshoes
         static public event StatusChangedHandler StatusChanged;
 
         static public ConcurrentQueue<Task> tasks = new ConcurrentQueue<Task>();
-        static public ConcurrentQueue<Task> postponed_tasks = new ConcurrentQueue<Task>();
+        static public ConcurrentQueue<Task> high_priority = new ConcurrentQueue<Task>();
 
         static private Status status;
         static public Status CurrStatus
@@ -84,14 +84,18 @@ namespace Snowshoes
 
             Task t;
 
-            while (postponed_tasks.TryDequeue(out t))
-            {
-                tasks.Enqueue(t);
-            }
-
-            while (tasks.TryDequeue(out t))
+            while (high_priority.TryDequeue(out t))
             {
                 t.RunSynchronously();
+            }
+
+            if (Snowshoes.CurrStatus == Status.Running)
+            {
+
+                while (tasks.TryDequeue(out t))
+                {
+                    t.RunSynchronously();
+                }
             }
         }
     }

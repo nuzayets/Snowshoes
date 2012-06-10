@@ -42,7 +42,8 @@ namespace Snowshoes
 
             if (ui != null)
             {
-                performAction(() => ui.Click());
+                
+                waitForExclusivelyAfterAction(() => ui.Click(), () => !D3.Game.Ingame && D3.Me.LevelArea.ToString() == "Axe_Bad_Data");
             }
         }
 

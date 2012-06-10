@@ -38,7 +38,8 @@ namespace Snowshoes.Common
                 || unit.ActorId == D3.SNOActorId.GoldMedium
                 || unit.ActorId == D3.SNOActorId.GoldSmall
                 || unit.Name.Contains("Flawless") // gems
-                || unit.Name.Contains("Plans")
+                || unit.Name.Contains("Plan")
+                || unit.Name.Contains("Design")
                 || unit.Name.Contains("Book ") // crafting materials
                 || unit.Name.Contains("Tome")
                 || unit.Name.Contains("Mythic") // Health potions
