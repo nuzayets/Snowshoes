@@ -78,12 +78,13 @@ namespace Snowshoes
 
         static public void waitForExclusively(Func<bool> func)
         {
+            Snowshoes.Pause();
             Task<bool> task;
             do
             {
                 task = new Task<bool>(func);
                 Snowshoes.high_priority.Enqueue(task);
-                Snowshoes.Pause();
+                
                 task.Wait();
             } while (!task.Result);
 
@@ -93,12 +94,14 @@ namespace Snowshoes
 
         static public void waitForExclusivelyAfterAction(Action act, Func<bool> func)
         {
+            Snowshoes.Pause();
+            Snowshoes.high_priority.Enqueue(new Task(act));
+
             Task<bool> task;
             do
             {
-                Snowshoes.Pause();
+                
                 task = new Task<bool>(func);
-                Snowshoes.high_priority.Enqueue(new Task(act));
                 Snowshoes.high_priority.Enqueue(task);
                 
                 task.Wait();
