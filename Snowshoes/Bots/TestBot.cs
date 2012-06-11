@@ -1,12 +1,14 @@
-﻿namespace Snowshoes.Bots
+﻿using D3;
+using Snowshoes.Common;
+
+namespace Snowshoes.Bots
 {
     class TestBot : AbstractBotSherpa
     {
         protected override void Loop()
         {
-            StartGame();
-
-            GoTown();
+            SnagIt.StashItems();
+            Snowshoes.Stop();
 
         }
     }

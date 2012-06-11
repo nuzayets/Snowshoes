@@ -57,7 +57,7 @@ namespace Snowshoes
         {
             if (GetBool(() => Me.InTown)) return;
 
-            PerformAction(() => Me.UsePower(SNOPowerId.UseStoneOfRecall));
+            WaitFor(() => Me.UsePower(SNOPowerId.UseStoneOfRecall));
 
             WaitFor(() => Me.InTown);
         }
@@ -108,27 +108,24 @@ namespace Snowshoes
             }
         }
 
-        protected static void Interact(Unit u)
+        protected static void Interact(Unit u, bool walk = true)
         {
             if (u.Type != UnitType.Gizmo && u.Type != UnitType.Monster && u.Type != UnitType.Item) return;
 
-            Walk(u.X, u.Y);
+            if (walk) Walk(u.X, u.Y);
 
-            WaitFor(()=> Me.Mode != UnitMode.Running);
+            WaitFor(() => Me.Mode != UnitMode.Running);
 
-            while (!GetBool(
+            WaitFor(
                 () =>
                 Me.UsePower(u.Type == UnitType.Monster ? SNOPowerId.Axe_Operate_NPC : SNOPowerId.Axe_Operate_Gizmo,
-                            u)))
-            {
-                Thread.Sleep(Game.Ping);
-            };
+                            u));
         }
 
-        protected static void Interact(string name)
+        protected static void Interact(string name, bool walk = true)
         {
             var unit = GetData(() => Unit.Get().Where(x => x.Name.Contains(name)).FirstOrDefault());
-            Interact(unit);
+            Interact(unit, walk);
         }
 
         protected static void RepairAll()

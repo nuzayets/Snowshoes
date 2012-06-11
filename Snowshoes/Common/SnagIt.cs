@@ -108,6 +108,8 @@ namespace Snowshoes.Common
 
         internal static void SalvageItems()
         {
+            
+
             foreach (
                 var item in
                     Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory)).Where(CheckItemSalvage))
@@ -136,13 +138,27 @@ namespace Snowshoes.Common
 
         internal static void StashItems()
         {
+            var stashUI =
+                Sherpa.GetData(
+                    () =>
+                    UIElement.Get().Where(x => x.Name.Contains("Root.NormalLayer.stash_dialog_mainPage.panel")).
+                        FirstOrDefault());
+            if (stashUI == null || !stashUI.Visible) return;
+
+            Snowshoes.Print("OK to Stash!");
+
             foreach (
                 var item in
                     Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory)).Where(CheckItemStash))
             {
                 var i = item;
 // ReSharper disable ConvertClosureToMethodGroup
-                Sherpa.GetBool(() => i.UseItem());
+                var p = i.GetItemFreeSpace(Container.Stash);
+                if (p.X == -1 || p.Y == -1)
+                {
+                    continue;
+                }
+                Sherpa.PerformAction(() => i.MoveItem(Container.Stash, p.X, p.Y));
 // ReSharper restore ConvertClosureToMethodGroup
                 Thread.Sleep(Game.Ping);
             }
