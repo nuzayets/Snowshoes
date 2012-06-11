@@ -1,23 +1,21 @@
-﻿using System;
-
-namespace Snowshoes.Common
+﻿namespace Snowshoes.Common
 {
     public class Waypoint
     {
         public Waypoint(D3.Point point, D3.SNOLevelArea levelArea, D3.SNOQuestId questId, int questStep = 0)
         {
-            _point = point;
-            _levelArea = levelArea;
-            _questId = questId;
-            _questStep = questStep;
+            Point = point;
+            LevelArea = levelArea;
+            QuestId = questId;
+            QuestStep = questStep;
         }
-        private D3.Point _point
+        private D3.Point Point
         { get; set; }
-        private D3.SNOLevelArea _levelArea
+        private D3.SNOLevelArea LevelArea
         { get; set; }
-        private D3.SNOQuestId _questId
+        private D3.SNOQuestId QuestId
         { get; set; }
-        private int _questStep
+        private int QuestStep
         { get; set; }
     }
 }

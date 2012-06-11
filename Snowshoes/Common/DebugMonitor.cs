@@ -1,6 +1,5 @@
 ﻿#region
 
-using System;
 using D3;
 
 #endregion
@@ -14,7 +13,7 @@ namespace Snowshoes.Common
         private SNOQuestId _questId;
         private int _questStep;
         private SNOLevelArea _levelArea;
-        private UI.DebugUI _debugWindow;
+        private readonly UI.DebugUI _debugWindow;
 
         public DebugMonitor(int delay, UI.DebugUI debugWindow) : base(delay)
         {
@@ -24,16 +23,14 @@ namespace Snowshoes.Common
 
         protected override void Loop()
         {
-            if (GetBool(updateData))
-            {
-                _debugWindow.txtX.Text = _x.ToString();
-                _debugWindow.txtY.Text = _y.ToString();
-            }
+            if (!GetBool(UpdateData)) return;
+            _debugWindow.txtX.Text = _x.ToString();
+            _debugWindow.txtY.Text = _y.ToString();
         }
 
-        private bool updateData()
+        private bool UpdateData()
         {
-            bool changed = changed = (_x != Me.X || _y != Me.Y);
+            bool changed = (_x != Me.X || _y != Me.Y);
             _x = Me.X;
             _y = Me.Y;
             _levelArea = Me.LevelArea;
