@@ -1,92 +1,85 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿#region
 
+using System;
+using System.Linq;
+using System.Threading;
+using D3;
+
+#endregion
 
 namespace Snowshoes.Common
 {
     public class Spell
     {
-        protected bool available = false;
-        protected bool forced = false;
-        protected int lastTick = System.Int32.MinValue;
-        protected D3.SNOPowerId id;
-        protected int cooldown = -1;
-        protected int primCost = 0;
-        protected int secCost = 0;
+        protected bool Available;
+        protected int Cooldown = -1;
+        protected bool Forced;
+        protected SNOPowerId Id;
+        protected int LastTick = Int32.MinValue;
+        protected int PrimCost;
+        protected int SecCost;
 
-        public Spell(D3.SNOPowerId _id, int _cooldown, int _cost1, int _cost2, bool _available)
+        public Spell(SNOPowerId id, int cooldown, int cost1, int cost2, bool available)
         {
-            id = _id;
-            cooldown = _cooldown;
-            primCost = _cost1;
-            secCost = _cost2;
-            available = _available;
-            forced = true;
-            init();
+            Id = id;
+            Cooldown = cooldown;
+            PrimCost = cost1;
+            SecCost = cost2;
+            Available = available;
+            Forced = true;
+            Init();
         }
 
-        public Spell(D3.SNOPowerId _id, int _cooldown, int _cost1, int _cost2)
+        public Spell(SNOPowerId id, int cooldown, int cost1, int cost2)
         {
-            id = _id;
-            cooldown = _cooldown;
-            primCost = _cost1;
-            secCost = _cost2;
-            init();
+            Id = id;
+            Cooldown = cooldown;
+            PrimCost = cost1;
+            SecCost = cost2;
+            Init();
         }
 
-        public void init()
+        public void Init()
         {
-            if (!forced)
-                available = Sherpa.getBool(() => D3.Me.Skills.Contains(id));
+            if (!Forced)
+                Available = Sherpa.GetBool(() => Me.Skills.Contains(Id));
         }
 
-        public bool use(D3.Unit target)
+        public bool Use(Unit target)
         {
-            if (available && Sherpa.getBool(() => D3.Me.PrimaryResource >= primCost && D3.Me.SecondaryResource >= secCost) && System.Environment.TickCount > lastTick + cooldown * 1000 + 100)
+            if (Available && Sherpa.GetBool(() => Me.PrimaryResource >= PrimCost && Me.SecondaryResource >= SecCost) &&
+                Environment.TickCount > LastTick + Cooldown*1000 + 100)
             {
-                Sherpa.performAction(() => D3.Me.UsePower(id, target));
-                lastTick = System.Environment.TickCount;
+                Sherpa.PerformAction(() => Me.UsePower(Id, target));
+                LastTick = Environment.TickCount;
                 Thread.Sleep(75);
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
-        public bool use(float _x, float _y)
+        public bool Use(float x, float y)
         {
-
-            if (available && System.Environment.TickCount > lastTick + cooldown * 1000 + 100)
+            if (Available && Environment.TickCount > LastTick + Cooldown*1000 + 100)
             {
-                Sherpa.performAction(() => D3.Me.UsePower(id, _x, _y, D3.Me.Z));
-                lastTick = System.Environment.TickCount;
+                Sherpa.PerformAction(() => Me.UsePower(Id, x, y, Me.Z));
+                LastTick = Environment.TickCount;
                 Thread.Sleep(75);
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
-        public bool use()
+        public bool Use()
         {
-            if (available && System.Environment.TickCount > lastTick + cooldown * 1000 + 100)
+            if (Available && Environment.TickCount > LastTick + Cooldown*1000 + 100)
             {
-                Sherpa.performAction(() => D3.Me.UsePower(id));
-                lastTick = System.Environment.TickCount;
+                Sherpa.PerformAction(() => Me.UsePower(Id));
+                LastTick = Environment.TickCount;
                 Thread.Sleep(75);
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
     }
 }

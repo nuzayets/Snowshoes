@@ -1,174 +1,191 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region
+
 using System.Linq;
-using System.Text;
 using System.Threading;
+using D3;
 using Snowshoes.Common;
+
+#endregion
 
 namespace Snowshoes
 {
-    abstract class AbstractBotSherpa : Sherpa
+    internal abstract class AbstractBotSherpa : Sherpa
     {
-
-        protected void startGame()
+        protected void StartGame()
         {
-            if (getBool(() => D3.Game.Ingame))
+            if (GetBool(() => Game.Ingame))
             {
-                exitGame();
+                ExitGame();
             }
 
 
-            D3.UIElement okButton = getData<D3.UIElement>(() => D3.UIElement.Get(0xB4433DA3F648A992)); ;
-            if (okButton != default(D3.UIElement) && getBool(() => okButton.Visible))
+            var okButton = GetData(() => UIElement.Get(0xB4433DA3F648A992));
+            if (okButton != default(UIElement) && GetBool(() => okButton.Visible))
             {
-                performAction(() => okButton.Click());
+                PerformAction(okButton.Click);
             }
 
-            D3.UIElement resumeGame = null;
-            while (resumeGame == null || !getBool(() => resumeGame.Visible))
+            UIElement[] resumeGame = {null};
+            while (resumeGame[0] == null || GetBool(() => !resumeGame[0].Visible))
             {
-                resumeGame = getData<D3.UIElement>(() => D3.UIElement.Get(0x51A3923949DC80B7));
+                resumeGame[0] = GetData(() => UIElement.Get(0x51A3923949DC80B7));
             }
 
-            performAction(() => resumeGame.Click());
+            PerformAction(() => resumeGame[0].Click());
 
-            waitFor(() => D3.Game.Ingame && D3.Me.LevelArea.ToString() != "Axe_Bad_Data");
-
+            WaitFor(() => Game.Ingame && Me.LevelArea.ToString() != "Axe_Bad_Data");
         }
 
-        protected void exitGame()
+        protected void ExitGame()
         {
-            D3.UIElement ui = getData<D3.UIElement>(() => D3.UIElement.Get(0x5DB09161C4D6B4C6));
+            var ui = GetData(() => UIElement.Get(0x5DB09161C4D6B4C6));
 
             if (ui != null)
             {
-                
-                waitForExclusivelyAfterAction(() => ui.Click(), () => !D3.Game.Ingame && D3.Me.LevelArea.ToString() == "Axe_Bad_Data");
+                WaitForExclusivelyAfterAction(ui.Click,
+                                              () => !Game.Ingame && Me.LevelArea.ToString() == "Axe_Bad_Data");
             }
         }
 
-        protected bool needsRepair()
+        protected bool NeedsRepair()
         {
-            var indicator = getData<D3.UIElement>(() => D3.UIElement.Get(0xBD8B3C3679D4F4D9));
-            return (indicator != default(D3.UIElement) && indicator.Visible);
+            var indicator = GetData(() => UIElement.Get(0xBD8B3C3679D4F4D9));
+            return (indicator != default(UIElement) && indicator.Visible);
         }
 
-        protected void goTown()
+        protected void GoTown()
         {
-            if (getBool(() => D3.Me.InTown)) return;
+            if (GetBool(() => Me.InTown)) return;
 
-            performAction(() => D3.Me.UsePower(D3.SNOPowerId.UseStoneOfRecall));
+            PerformAction(() => Me.UsePower(SNOPowerId.UseStoneOfRecall));
 
-            waitFor(() => D3.Me.InTown);
+            WaitFor(() => Me.InTown);
         }
 
-        protected bool takePortal()
+        protected bool TakePortal()
         {
-            if (getBool(() => !D3.Me.InTown)) { return false; }
-
-            D3.Unit[] units = getData<D3.Unit[]>(() => D3.Unit.Get());
-
-            var unit = (from u in units where u.Type == D3.UnitType.Gizmo && u.ActorId == D3.SNOActorId.hearthPortal select u).FirstOrDefault();
-
-            if (unit == default(D3.Unit))
+            if (GetBool(() => !Me.InTown))
             {
                 return false;
             }
 
-            for (int i = 0; i < 3; i++)
+            var units = GetData(Unit.Get);
+
+            var unit =
+                (from u in units where u.Type == UnitType.Gizmo && u.ActorId == SNOActorId.hearthPortal select u).
+                    FirstOrDefault();
+
+            if (unit == default(Unit))
             {
-                performAction(() => D3.Me.UsePower(D3.SNOPowerId.Axe_Operate_Gizmo, unit));
+                return false;
+            }
+
+            for (var i = 0; i < 3; i++)
+            {
+                PerformAction(() => Me.UsePower(SNOPowerId.Axe_Operate_Gizmo, unit));
                 Thread.Sleep(500);
 
-                if (getBool(() => !D3.Me.InTown))
+                if (GetBool(() => !Me.InTown))
                 {
                     break;
                 }
             }
 
             return true;
-
         }
 
 
-
-        protected void walk(float x, float y)
+        protected void Walk(float x, float y)
         {
-            performAction(() => D3.Me.UsePower(D3.SNOPowerId.Walk, x, y, D3.Me.Z));
+            PerformAction(() => Me.UsePower(SNOPowerId.Walk, x, y, Me.Z));
             while (GetDistance(x, y) > 10)
             {
-                if (getBool(() => D3.Me.Mode != D3.UnitMode.Running))
+                if (GetBool(() => Me.Mode != UnitMode.Running))
                 {
-                    performAction(() => D3.Me.UsePower(D3.SNOPowerId.Walk, x, y, D3.Me.Z));
+                    PerformAction(() => Me.UsePower(SNOPowerId.Walk, x, y, Me.Z));
                 }
                 Thread.Sleep(100);
             }
-
         }
 
-        protected void interact(D3.Unit u)
+        protected void Interact(Unit u)
         {
-            if (u.Type == D3.UnitType.Gizmo
-                || u.Type == D3.UnitType.Monster
-                || u.Type == D3.UnitType.Item)
-            {
-                walk(u.X, u.Y);
-                performAction(() => D3.Me.UsePower(u.Type == D3.UnitType.Monster ? D3.SNOPowerId.Axe_Operate_NPC : D3.SNOPowerId.Axe_Operate_Gizmo, u));
-            }
+            if (u.Type != UnitType.Gizmo && u.Type != UnitType.Monster && u.Type != UnitType.Item) return;
+
+            Walk(u.X, u.Y);
+            PerformAction(
+                () =>
+                Me.UsePower(u.Type == UnitType.Monster ? SNOPowerId.Axe_Operate_NPC : SNOPowerId.Axe_Operate_Gizmo,
+                            u));
         }
 
-        protected void interact(string name)
+        protected void Interact(string name)
         {
-            var unit = getData<D3.Unit>(() => D3.Unit.Get().Where(x => x.Name.Contains(name)).FirstOrDefault());
-            interact(unit);
+            var unit = GetData(() => Unit.Get().Where(x => x.Name.Contains(name)).FirstOrDefault());
+            Interact(unit);
         }
 
-        protected void repairAll()
+        protected void RepairAll()
         {
-            var btn = getData<D3.UIElement>(() => D3.UIElement.Get(0x80F5D06A035848A5));
-            if (btn != default(D3.UIElement))
+            var btn = GetData(() => UIElement.Get(0x80F5D06A035848A5));
+            if (btn != default(UIElement))
             {
                 btn.Click();
             }
         }
 
-        protected void killAll()
+        protected void KillAll()
         {
-            var mobs = waitForMobs(0);
+            var mobs = WaitForMobs(0);
             while (mobs.Length > 0)
             {
-                killThese(mobs);
-                mobs = waitForMobs(0);
+                KillThese(mobs);
+                mobs = WaitForMobs(0);
             }
         }
 
-        protected D3.Unit[] waitForMobs(uint timeout)
+        protected Unit[] WaitForMobs(uint timeout)
         {
-            var mobs = getData<D3.Unit[]>(() => D3.Unit.Get().Where(x => x.Type == D3.UnitType.Monster && ((uint)x.MonsterType == 0 || (uint)x.MonsterType == 4) && x.Mode != D3.UnitMode.Warping && x.Life > 0
-                && x.GetAttributeInteger(D3.UnitAttribute.Is_NPC) == 0 && x.GetAttributeInteger(D3.UnitAttribute.Is_Helper) == 0
-                && x.GetAttributeInteger(D3.UnitAttribute.Invulnerable) == 0 && x.ActorId != D3.SNOActorId.DemonHunter_SpikeTrapRune_multiTrap_Proxy).ToArray());
+            var mobs =
+                GetData(
+                    () =>
+                    Unit.Get().Where(
+                        x =>
+                        x.Type == UnitType.Monster && ((uint) x.MonsterType == 0 || (uint) x.MonsterType == 4) &&
+                        x.Mode != UnitMode.Warping && x.Life > 0
+                        && x.GetAttributeInteger(UnitAttribute.Is_NPC) == 0 &&
+                        x.GetAttributeInteger(UnitAttribute.Is_Helper) == 0
+                        && x.GetAttributeInteger(UnitAttribute.Invulnerable) == 0 &&
+                        x.ActorId != SNOActorId.DemonHunter_SpikeTrapRune_multiTrap_Proxy).ToArray());
             uint count = 0;
-            while (mobs.Length <= 0 && count < 2 * timeout)
+            while (mobs.Length <= 0 && count < 2*timeout)
             {
                 Thread.Sleep(500);
-                mobs = mobs = getData<D3.Unit[]>(() => D3.Unit.Get().Where(x => x.Type == D3.UnitType.Monster && ((uint)x.MonsterType == 0 || (uint)x.MonsterType == 4) && x.Mode != D3.UnitMode.Warping && x.Life > 0
-                && x.GetAttributeInteger(D3.UnitAttribute.Is_NPC) == 0 && x.GetAttributeInteger(D3.UnitAttribute.Is_Helper) == 0
-                && x.GetAttributeInteger(D3.UnitAttribute.Invulnerable) == 0 && x.ActorId != D3.SNOActorId.DemonHunter_SpikeTrapRune_multiTrap_Proxy).ToArray());
+                mobs =
+                    GetData(
+                        () =>
+                        Unit.Get().Where(
+                            x =>
+                            x.Type == UnitType.Monster && ((uint) x.MonsterType == 0 || (uint) x.MonsterType == 4) &&
+                            x.Mode != UnitMode.Warping && x.Life > 0
+                            && x.GetAttributeInteger(UnitAttribute.Is_NPC) == 0 &&
+                            x.GetAttributeInteger(UnitAttribute.Is_Helper) == 0
+                            && x.GetAttributeInteger(UnitAttribute.Invulnerable) == 0 &&
+                            x.ActorId != SNOActorId.DemonHunter_SpikeTrapRune_multiTrap_Proxy).ToArray());
                 ++count;
             }
             return mobs;
         }
 
-        protected void killThese(D3.Unit[] units)
+        protected void KillThese(Unit[] units)
         {
-            units = units.OrderBy(u1 => GetDistance(u1.X, u1.Y, getData<float>(() => D3.Me.X), getData<float>(() => D3.Me.Y))).ToArray();
+            units = units.OrderBy(u1 => GetDistance(u1.X, u1.Y, GetData(() => Me.X), GetData(() => Me.Y))).ToArray();
             for (uint i = 0; i < units.Length; ++i)
             {
-                if (getBool(() => (units[i].Valid && units[i].Life > 0)))
-                {
-                    Attack.AttackUnit(units[i]);
-                    Thread.Sleep(154);
-                }
+                var i1 = i;
+                if (!GetBool(() => (units[i1].Valid && units[i1].Life > 0))) continue;
+                Attack.AttackUnit(units[i]);
+                Thread.Sleep(154);
             }
         }
     }

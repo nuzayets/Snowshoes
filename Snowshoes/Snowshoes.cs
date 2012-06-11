@@ -1,101 +1,112 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
+﻿#region
 
+using System;
+using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using D3;
+using Snowshoes.Bots;
+using Snowshoes.Common;
+using Snowshoes.UI;
+
+#endregion
 
 namespace Snowshoes
 {
-    public delegate void StatusChangedHandler (Status s);
-    public enum Status { Running, Paused, Stopped };
+    public delegate void StatusChangedHandler(Status s);
 
-    class Snowshoes
+    public enum Status
     {
-        static public event StatusChangedHandler StatusChanged;
+        Running,
+        Paused,
+        Stopped
+    };
 
-        static public ConcurrentQueue<Task> tasks = new ConcurrentQueue<Task>();
-        static public ConcurrentQueue<Task> high_priority = new ConcurrentQueue<Task>();
+    internal class Snowshoes
+    {
+        public static ConcurrentQueue<Task> Tasks = new ConcurrentQueue<Task>();
+        public static ConcurrentQueue<Task> HighPriority = new ConcurrentQueue<Task>();
 
-        static private Status status;
-        static public Status CurrStatus
+        private static Status _status;
+
+        private static MainUI _mainWindow;
+
+        public static Status CurrStatus
         {
-            get { return status; }
-            private set 
-            { 
-                status = value;
-                if (StatusChanged != null) StatusChanged(status);
+            get { return _status; }
+            private set
+            {
+                _status = value;
+                if (StatusChanged != null) StatusChanged(_status);
             }
         }
-        static private UI.MainUI mainWindow;
-        
-        static void Main(string[] args)
+
+        public static event StatusChangedHandler StatusChanged;
+
+// ReSharper disable UnusedParameter.Local
+        private static void Main(string[] args)
+// ReSharper restore UnusedParameter.Local
         {
-            mainWindow = new UI.MainUI();
-            mainWindow.Show();
+            _mainWindow = new MainUI();
+            _mainWindow.Show();
 
             CurrStatus = Status.Stopped; // start stopped
 
-            Game.OnTickEvent += new TickEventHandler(Game_OnTickEvent);
+            Game.OnTickEvent += Game_OnTickEvent;
 
-            new Common.GoldMonitor(500);
-            new Bots.Sarkoth();
+            new GoldMonitor(500);
+            new Sarkoth();
         }
 
 
-        static public void Stop()
+        public static void Stop()
         {
             Print("Stopping.");
 
             CurrStatus = Status.Stopped;
         }
 
-        static public void Start()
+        public static void Start()
         {
             Print("Starting.");
 
             CurrStatus = Status.Running;
         }
 
-        static public void Pause()
+        public static void Pause()
         {
             Print("Pausing.");
 
             CurrStatus = Status.Paused;
         }
 
-        static public void Print(String str)
+        public static void Print(String str)
         {
-            StackTrace trace = new StackTrace();
-            mainWindow.PrintLine(string.Format("[{0} - {1}.{2}]: {3}", DateTime.Now.ToShortTimeString(), trace.GetFrame(1).GetMethod().DeclaringType.Name, trace.GetFrame(1).GetMethod().Name, str));
+            var trace = new StackTrace();
+            _mainWindow.PrintLine(string.Format("[{0} - {1}.{2}]: {3}", DateTime.Now.ToShortTimeString(),
+                                               trace.GetFrame(1).GetMethod().DeclaringType.Name,
+                                               trace.GetFrame(1).GetMethod().Name, str));
         }
 
-        static public void GoldCount(String gold, String delta_gold, String gph)
+        public static void GoldCount(String gold, String deltaGold, String gph)
         {
-            mainWindow.setGold(gold, delta_gold, gph);
+            _mainWindow.SetGold(gold, deltaGold, gph);
         }
 
-        static void Game_OnTickEvent(EventArgs e)
+        private static void Game_OnTickEvent(EventArgs e)
         {
-
             Task t;
 
-            while (high_priority.TryDequeue(out t))
+            while (HighPriority.TryDequeue(out t))
             {
                 t.RunSynchronously();
             }
 
-            if (Snowshoes.CurrStatus == Status.Running)
-            {
+            if (CurrStatus != Status.Running) return;
 
-                while (tasks.TryDequeue(out t))
-                {
-                    t.RunSynchronously();
-                }
+            while (Tasks.TryDequeue(out t))
+            {
+                t.RunSynchronously();
             }
         }
     }

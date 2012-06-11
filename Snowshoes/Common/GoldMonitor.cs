@@ -1,50 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿#region
 
+using System;
+using D3;
+
+#endregion
 
 namespace Snowshoes.Common
 {
-    class GoldMonitor : Sherpa
+    internal class GoldMonitor : Sherpa
     {
+        private int _goldStart;
+        private int _ticksStart;
 
-        int gold_start = 0;
-        int ticks_start = 0;
-
-        public GoldMonitor(int delay) : base(delay) 
+        public GoldMonitor(int delay) : base(delay)
         {
             ImmuneToPause = true;
         }
 
-        String friendly_number(decimal number)
+        private static String FriendlyNumber(decimal number)
         {
             if (number < 1000)
                 return string.Format("{0}  ", number);
-            else if (number < 1000000)
-                return string.Format("{0} k", Math.Round(number / 1000m, 2));
-            else
-                return string.Format("{0} M", Math.Round(number / 1000000m, 2));
+            if (number < 1000000)
+                return string.Format("{0} k", Math.Round(number/1000m, 2));
+            return string.Format("{0} M", Math.Round(number/1000000m, 2));
         }
 
-        override protected void loop()
+        protected override void Loop()
         {
-            int gold = getData<int>(() => D3.Game.Ingame && D3.Me.LevelArea.ToString() != "Axe_Bad_Data" ? D3.Me.Gold : 0);
-            if (gold != 0)
+            var gold = GetData(() => Game.Ingame && Me.LevelArea.ToString() != "Axe_Bad_Data" ? Me.Gold : 0);
+            if (gold == 0) return;
+
+            if (_goldStart == 0)
             {
-                if (gold_start == 0)
-                {
-                    gold_start = gold;
-                    ticks_start = System.Environment.TickCount;
-                    return;
-                }
-
-                decimal hours_elapsed = (System.Environment.TickCount - ticks_start) / (1000.0m * 3600.0m);
-                int gold_earned =  gold - gold_start;
-                decimal gold_per_hour = gold_earned / hours_elapsed;
-
-                Snowshoes.GoldCount(friendly_number(gold), friendly_number(gold_earned), friendly_number(gold_per_hour));
+                _goldStart = gold;
+                _ticksStart = Environment.TickCount;
+                return;
             }
+
+            var hoursElapsed = (Environment.TickCount - _ticksStart)/(1000.0m*3600.0m);
+            var goldEarned = gold - _goldStart;
+            var goldPerHour = goldEarned/hoursElapsed;
+
+            Snowshoes.GoldCount(FriendlyNumber(gold), FriendlyNumber(goldEarned), FriendlyNumber(goldPerHour));
         }
     }
 }

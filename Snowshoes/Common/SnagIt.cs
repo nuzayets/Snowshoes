@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region
+
 using System.Linq;
-using System.Text;
 using System.Threading;
+using D3;
+
+#endregion
 
 namespace Snowshoes.Common
 {
@@ -22,28 +24,43 @@ namespace Snowshoes.Common
             //}
 
 
-            var items = Sherpa.getData<D3.Unit[]>(() => D3.Unit.Get().Where(x => x.Type == D3.UnitType.Item && x.ItemContainer == D3.Container.Unknown && CheckItem(x)).ToArray());
-            while (items.Any()) 
+            var items =
+                Sherpa.GetData(
+                    () =>
+                    Unit.Get().Where(
+                        x => x.Type == UnitType.Item && x.ItemContainer == Container.Unknown && CheckItem(x)).ToArray());
+            while (items.Any())
             {
-                Sherpa.performAction(() => D3.Me.UsePower(items[0].Type == D3.UnitType.Gizmo || items[0].Type == D3.UnitType.Item ? D3.SNOPowerId.Axe_Operate_Gizmo : D3.SNOPowerId.Axe_Operate_NPC, items[0]));
+                var items1 = items;
+                Sherpa.PerformAction(
+                    () =>
+                    Me.UsePower(
+                        items1[0].Type == UnitType.Gizmo || items1[0].Type == UnitType.Item
+                            ? SNOPowerId.Axe_Operate_Gizmo
+                            : SNOPowerId.Axe_Operate_NPC, items1[0]));
                 Thread.Sleep(250);
-                items = Sherpa.getData<D3.Unit[]>(() => D3.Unit.Get().Where(x => x.Type == D3.UnitType.Item && x.ItemContainer == D3.Container.Unknown && CheckItem(x)).ToArray());
+                items =
+                    Sherpa.GetData(
+                        () =>
+                        Unit.Get().Where(
+                            x => x.Type == UnitType.Item && x.ItemContainer == Container.Unknown && CheckItem(x)).
+                            ToArray());
             }
         }
 
-        public static bool CheckItem(D3.Unit unit)
+        public static bool CheckItem(Unit unit)
         {
-            return unit.ActorId == D3.SNOActorId.GoldCoins
-                || unit.ActorId == D3.SNOActorId.GoldLarge
-                || unit.ActorId == D3.SNOActorId.GoldMedium
-                || unit.ActorId == D3.SNOActorId.GoldSmall
-                || unit.Name.Contains("Flawless") // gems
-                || unit.Name.Contains("Plan")
-                || unit.Name.Contains("Design")
-                || unit.Name.Contains("Book ") // crafting materials
-                || unit.Name.Contains("Tome")
-                || unit.Name.Contains("Mythic") // Health potions
-                || unit.ItemQuality >= D3.UnitItemQuality.Magic1;
+            return unit.ActorId == SNOActorId.GoldCoins
+                   || unit.ActorId == SNOActorId.GoldLarge
+                   || unit.ActorId == SNOActorId.GoldMedium
+                   || unit.ActorId == SNOActorId.GoldSmall
+                   || unit.Name.Contains("Flawless") // gems
+                   || unit.Name.Contains("Plan")
+                   || unit.Name.Contains("Design")
+                   || unit.Name.Contains("Book ") // crafting materials
+                   || unit.Name.Contains("Tome")
+                   || unit.Name.Contains("Mythic") // Health potions
+                   || unit.ItemQuality >= UnitItemQuality.Magic1;
         }
     }
 }

@@ -88,7 +88,7 @@
             this.pause.Size = new System.Drawing.Size(32, 32);
             this.pause.TabIndex = 4;
             this.pause.UseVisualStyleBackColor = true;
-            this.pause.Click += new System.EventHandler(this.pause_Click);
+            this.pause.Click += new System.EventHandler(this.PauseClick);
             // 
             // stop
             // 
@@ -101,7 +101,7 @@
             this.stop.Size = new System.Drawing.Size(32, 32);
             this.stop.TabIndex = 5;
             this.stop.UseVisualStyleBackColor = true;
-            this.stop.Click += new System.EventHandler(this.stop_Click);
+            this.stop.Click += new System.EventHandler(this.StopClick);
             // 
             // start
             // 
@@ -113,7 +113,7 @@
             this.start.Size = new System.Drawing.Size(32, 32);
             this.start.TabIndex = 3;
             this.start.UseVisualStyleBackColor = true;
-            this.start.Click += new System.EventHandler(this.start_Click);
+            this.start.Click += new System.EventHandler(this.StartClick);
             // 
             // label2
             // 
@@ -189,7 +189,7 @@
             this.MaximizeBox = false;
             this.Name = "MainUI";
             this.Text = "Snowshoes";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainUI_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainUIFormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

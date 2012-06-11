@@ -1,27 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿#region
+
+using System;
 using System.Windows.Forms;
+
+#endregion
 
 namespace Snowshoes.UI
 {
     public partial class MainUI : Form
     {
-        
         public MainUI()
         {
             InitializeComponent();
-            Snowshoes.StatusChanged += new StatusChangedHandler(Snowshoes_StatusChanged);
-
+            Snowshoes.StatusChanged += SnowshoesStatusChanged;
         }
 
 
-
-        private void Snowshoes_StatusChanged(Status s)
+        private void SnowshoesStatusChanged(Status s)
         {
             switch (s)
             {
@@ -48,48 +43,47 @@ namespace Snowshoes.UI
 
         public void PrintLine(String text)
         {
-            this.Invoke(
-                new Action(() => 
-                {
-                    this.outputBox.Text += text + Environment.NewLine;
-                    this.outputBox.SelectionStart = this.outputBox.Text.Length;
-                    this.outputBox.ScrollToCaret();
-                }
-            ));
-        }
-
-        public void setGold(String gold, String delta_gold, String gph)
-        {
-            this.Invoke(
+            Invoke(
                 new Action(() =>
-                {
-                    lblGold.Text = gold;
-                    lblDeltaGold.Text = delta_gold;
-                    lblGph.Text = gph;
-                }
-            ));
+                               {
+                                   outputBox.Text += text + Environment.NewLine;
+                                   outputBox.SelectionStart = outputBox.Text.Length;
+                                   outputBox.ScrollToCaret();
+                               }
+                    ));
         }
 
-        private void start_Click(object sender, EventArgs e)
+        public void SetGold(String gold, String deltaGold, String gph)
+        {
+            Invoke(
+                new Action(() =>
+                               {
+                                   lblGold.Text = gold;
+                                   lblDeltaGold.Text = deltaGold;
+                                   lblGph.Text = gph;
+                               }
+                    ));
+        }
+
+        private void StartClick(object sender, EventArgs e)
         {
             Snowshoes.Start();
         }
 
-        private void pause_Click(object sender, EventArgs e)
+        private void PauseClick(object sender, EventArgs e)
         {
             Snowshoes.Pause();
         }
 
-        private void stop_Click(object sender, EventArgs e)
+        private void StopClick(object sender, EventArgs e)
         {
             Snowshoes.Stop();
         }
 
-        private void MainUI_FormClosing(object sender, FormClosingEventArgs e)
+        private void MainUIFormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
-            this.WindowState = FormWindowState.Minimized;
+            WindowState = FormWindowState.Minimized;
         }
-
     }
 }

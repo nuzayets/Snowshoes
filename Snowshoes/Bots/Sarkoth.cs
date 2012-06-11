@@ -1,164 +1,154 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
+using D3;
 using Snowshoes.Common;
+
+#endregion
 
 namespace Snowshoes.Bots
 {
-    class Sarkoth : AbstractBotSherpa
+    internal class Sarkoth : AbstractBotSherpa
     {
-
-        List<decimal> successes = new List<decimal>();
-        List<decimal> failures = new List<decimal>();
+        private readonly List<decimal> _failures = new List<decimal>();
+        private readonly List<decimal> _successes = new List<decimal>();
 
         public Sarkoth()
         {
-            new Common.Watchdog(2500, this);
-            new Common.DeathMonitor(250, this);
+            new Watchdog(2500, this);
+            new DeathMonitor(250, this);
         }
 
 
-        private bool isInventoryStuffed()
+        private static bool IsInventoryStuffed()
         {
-            return getBool(() => D3.Me.GetContainerItems(D3.Container.Inventory).Sum(item => item.ItemSizeX * item.ItemSizeY) >= 40);
+            return
+                GetBool(() => Me.GetContainerItems(Container.Inventory).Sum(item => item.ItemSizeX*item.ItemSizeY) >= 40);
         }
 
-        private void repairAndSell()
+        private void RepairAndSell()
         {
-            if (needsRepair() || isInventoryStuffed())
+            if (!NeedsRepair() && !IsInventoryStuffed()) return;
+            GoTown();
+
+            Walk(2897, 2786); // walk to Tashun
+
+
+            PerformAction(() => UIElement.Get(0xDAECD77F9F0DCFB).Click());
+            // open your inventory - necessary for identify
+
+            Thread.Sleep(500); // eh. just in case.
+
+            var inventory = GetData(() => Me.GetContainerItems(Container.Inventory));
+
+
+            foreach (var item in inventory.Where(item => !item.ItemIdentified))
             {
-
-                goTown();
-
-                walk(2897, 2786); // walk to Tashun
-
-
-                performAction(() => D3.UIElement.Get(0xDAECD77F9F0DCFB).Click()); // open your inventory - necessary for identify
-
-                Thread.Sleep(500); // eh. just in case.
-
-                D3.Unit[] inventory = getData<D3.Unit[]>(() => D3.Me.GetContainerItems(D3.Container.Inventory));
-
-
-
-                foreach (D3.Unit item in inventory)
-                {
-
-                    if (!item.ItemIdentified)
-                    {
-                        performAction(() => item.UseItem());
-                        waitFor(() => item.ItemIdentified);
-                    }
-
-                }
-
-                Thread.Sleep(750);
-
-                interact("Tashun the Miner");
-
-                Thread.Sleep(500);
-
-                repairAll();
-
-
-
-
-
-
-                foreach (D3.Unit item in getData<D3.Unit[]>(() => D3.Me.GetContainerItems(D3.Container.Inventory)))
-                {
-                    if (item.ItemQuality >= D3.UnitItemQuality.Magic1 && item.ItemQuality < D3.UnitItemQuality.Legendary)
-                    {
-                        float wpMax = item.GetAttributeInteger(D3.UnitAttribute.Damage_Weapon_Max_Total_All);
-                        float wpMin = item.GetAttributeInteger(D3.UnitAttribute.Damage_Weapon_Min_Total_All);
-                        float mf = item.GetAttributeReal(D3.UnitAttribute.Magic_Find);
-                        float gf = item.GetAttributeReal(D3.UnitAttribute.Gold_Find);
-
-
-                        if (!(wpMax / wpMin >= 750 || mf >= 0.19 || gf >= 0.19))
-                        {
-                            performAction(() => item.SellItem());
-                            Thread.Sleep(50);
-                        }
-                    }
-
-                }
-
-            
-            walk(2977, 2799);
-            takePortal();
-
+                PerformAction(() => item.UseItem());
+                WaitFor(() => item.ItemIdentified);
             }
+
+            Thread.Sleep(750);
+
+            Interact("Tashun the Miner");
+
+            Thread.Sleep(500);
+
+            RepairAll();
+
+
+            foreach (var item1 in from item in GetData(() => Me.GetContainerItems(Container.Inventory))
+                                  where
+                                      item.ItemQuality >= UnitItemQuality.Magic1 &&
+                                      item.ItemQuality < UnitItemQuality.Legendary
+                                  let wpMax = item.GetAttributeInteger(UnitAttribute.Damage_Weapon_Max_Total_All)
+                                  let wpMin = item.GetAttributeInteger(UnitAttribute.Damage_Weapon_Min_Total_All)
+                                  let mf = item.GetAttributeReal(UnitAttribute.Magic_Find)
+                                  let gf = item.GetAttributeReal(UnitAttribute.Gold_Find)
+                                  where !(wpMax/(float) wpMin >= 750 || mf >= 0.19 || gf >= 0.19)
+                                  select item)
+            {
+                PerformAction(item1.SellItem);
+                Thread.Sleep(50);
+            }
+
+
+            Walk(2977, 2799);
+            TakePortal();
         }
 
-        protected override void loop()
+        protected override void Loop()
         {
-            
-            startGame();
+            StartGame();
 
-    
-            int ticks = System.Environment.TickCount;
 
-            int gold_start = getData<int>(() => D3.Me.Gold);
+            var ticks = Environment.TickCount;
 
-            walk(1995, 2603);
-            performAction(() => D3.Me.UsePower(D3.SNOPowerId.DemonHunter_SmokeScreen));
-            walk(2025, 2563);
-            performAction(() => D3.Me.UsePower(D3.SNOPowerId.DemonHunter_SmokeScreen));
-            walk(2057, 2528);
-            performAction(() => D3.Me.UsePower(D3.SNOPowerId.DemonHunter_SmokeScreen));
-            walk(2081, 2487);
-            var cellar = getData<D3.Unit>(() => D3.Unit.Get().FirstOrDefault(u => u.Name.Contains("Dank Cellar")));
-            if (cellar == default(D3.Unit))
+            var goldStart = GetData(() => Me.Gold);
+
+            Walk(1995, 2603);
+            PerformAction(() => Me.UsePower(SNOPowerId.DemonHunter_SmokeScreen));
+            Walk(2025, 2563);
+            PerformAction(() => Me.UsePower(SNOPowerId.DemonHunter_SmokeScreen));
+            Walk(2057, 2528);
+            PerformAction(() => Me.UsePower(SNOPowerId.DemonHunter_SmokeScreen));
+            Walk(2081, 2487);
+            var cellar = GetData(() => Unit.Get().FirstOrDefault(u => u.Name.Contains("Dank Cellar")));
+            if (cellar == default(Unit))
             {
                 //goTown();
-                exitGame();
-                decimal runTime = Math.Round((System.Environment.TickCount - ticks) / 1000m, 0);
-                failures.Add(runTime);
-                Snowshoes.Print(String.Format("{0} secs failure run ({1} avg); {2}% success rate", runTime, Math.Round(failures.Average()), Math.Round(((decimal)successes.Count/((decimal)failures.Count+(decimal)successes.Count))*100m),0));
+                ExitGame();
+                var runTime = Math.Round((Environment.TickCount - ticks)/1000m, 0);
+                _failures.Add(runTime);
+                Snowshoes.Print(String.Format("{0} secs failure run ({1} avg); {2}% success rate", runTime,
+                                              Math.Round(_failures.Average()),
+                                              Math.Round((_successes.Count/
+                                                          (_failures.Count + (decimal) _successes.Count))*
+                                                         100m)));
                 return;
             }
 
 
-            performAction(() => D3.Me.UsePower(D3.SNOPowerId.DemonHunter_SmokeScreen));
-            walk(2081, 2487);
-            performAction(() => D3.Me.UsePower(D3.SNOPowerId.DemonHunter_Preparation));
-            walk(2066, 2477);
-            performAction(() => D3.Me.UsePower(D3.SNOPowerId.DemonHunter_Companion));
+            PerformAction(() => Me.UsePower(SNOPowerId.DemonHunter_SmokeScreen));
+            Walk(2081, 2487);
+            PerformAction(() => Me.UsePower(SNOPowerId.DemonHunter_Preparation));
+            Walk(2066, 2477);
+            PerformAction(() => Me.UsePower(SNOPowerId.DemonHunter_Companion));
 
-            interact(cellar);
+            Interact(cellar);
 
-            
 
-            performAction(() => D3.Me.UsePower(D3.SNOPowerId.DemonHunter_SmokeScreen));
+            PerformAction(() => Me.UsePower(SNOPowerId.DemonHunter_SmokeScreen));
 
-            walk(108, 158);
-            walk(129, 143);
-            
-            walk(118, 138);
+            Walk(108, 158);
+            Walk(129, 143);
 
-            repairAndSell();
+            Walk(118, 138);
 
-            killAll();
-            performAction(() => D3.Me.UsePower(D3.SNOPowerId.DemonHunter_SmokeScreen));
+            RepairAndSell();
+
+            KillAll();
+            PerformAction(() => Me.UsePower(SNOPowerId.DemonHunter_SmokeScreen));
 
             SnagIt.SnagItems();
 
 
-            Snowshoes.Print(string.Format("Collected {0}k!", Math.Round((getData<int>(()=>D3.Me.Gold) - gold_start) / 1000m, 1)));
-            
+            Snowshoes.Print(string.Format("Collected {0}k!", Math.Round((GetData(() => Me.Gold) - goldStart)/1000m, 1)));
+
 
             //goTown();
-            
 
-            decimal srunTime = Math.Round((System.Environment.TickCount - ticks) / 1000m, 0);
-            successes.Add(srunTime);
-            Snowshoes.Print(String.Format("{0} secs success run ({1} avg); {2}% rate ({3}/{4})", srunTime, Math.Round(successes.Average()) , Math.Round(((decimal)successes.Count / ((decimal)failures.Count + (decimal)successes.Count)) * 100m), successes.Count, successes.Count + failures.Count));
-            
 
+            var srunTime = Math.Round((Environment.TickCount - ticks)/1000m, 0);
+            _successes.Add(srunTime);
+            Snowshoes.Print(String.Format("{0} secs success run ({1} avg); {2}% rate ({3}/{4})", srunTime,
+                                          Math.Round(_successes.Average()),
+                                          Math.Round((_successes.Count/(_failures.Count + (decimal) _successes.Count))*
+                                                     100m),
+                                          _successes.Count, _successes.Count + _failures.Count));
         }
-
     }
 }

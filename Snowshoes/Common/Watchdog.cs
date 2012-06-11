@@ -1,31 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-
-
-namespace Snowshoes.Common
+﻿namespace Snowshoes.Common
 {
-    class Watchdog : Sherpa
+    internal class Watchdog : Sherpa
     {
-        Sherpa dependent;
+        private readonly Sherpa _dependent;
 
         public Watchdog(int delay, Sherpa caller)
             : base(delay)
         {
-            dependent = caller;
+            _dependent = caller;
         }
 
-        override protected void loop()
+        protected override void Loop()
         {
-            if (dependent.tickRunTime() > 60000)
-            {
-                Snowshoes.Print("Watchdog kill!");
-                dependent.HardRestart();
-                Thread.Sleep(15000); // not gonna die again in 5 secs are we?
-            }
+            if (_dependent.TickRunTime() <= 60000) return;
+            Snowshoes.Print("Watchdog kill!");
+            _dependent.HardRestart();
         }
-
     }
 }

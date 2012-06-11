@@ -1,156 +1,154 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿#region
+
+using System;
 using System.Threading;
 using System.Threading.Tasks;
+using D3;
+
+#endregion
 
 namespace Snowshoes
 {
-    public abstract class Sherpa 
+    public abstract class Sherpa
     {
+        private readonly int _delay;
 
-        Thread thread;
-        int delay;
+        protected bool ImmuneToPause;
+        private bool _stopping;
+        private Thread _thread;
+        private int _ticksStart;
 
-        protected bool ImmuneToPause = false;
-        private bool stopping = false;
-        private int ticks_start = 0;
-
-        public Sherpa(int delay)
+        protected Sherpa(int delay)
         {
-            this.delay = delay;
-            init();
+            _delay = delay;
+            Init();
         }
 
-        public Sherpa()
+        protected Sherpa()
         {
-            this.delay = 0;
-            init();
+            _delay = 0;
+            Init();
         }
 
-        private void init()
+        private void Init()
         {
-            thread = new Thread(Run);
-            thread.Start();
+            _thread = new Thread(Run);
+            _thread.Start();
         }
 
-        public int tickRunTime()
+        public int TickRunTime()
         {
-            return System.Environment.TickCount - ticks_start;
+            return Environment.TickCount - _ticksStart;
         }
 
-        static public float GetDistance(float x, float y)
+        public static float GetDistance(float x, float y)
         {
-            return GetDistance(x, y, getData<float>(() => D3.Me.X), getData<float>(() => D3.Me.Y));
+            return GetDistance(x, y, GetData(() => Me.X), GetData(() => Me.Y));
         }
 
-        static public float GetDistance(float x, float y, float x2, float y2)
+        public static float GetDistance(float x, float y, float x2, float y2)
         {
-            return (float)Math.Sqrt((x - x2) * (x - x2) + (y - y2) * (y - y2));
+            return (float) Math.Sqrt((x - x2)*(x - x2) + (y - y2)*(y - y2));
         }
 
-        static public T getData<T>(Func<T> func)
+        public static T GetData<T>(Func<T> func)
         {
-            Task<T> task = new Task<T>(func);
-            Snowshoes.tasks.Enqueue(task);
+            var task = new Task<T>(func);
+            Snowshoes.Tasks.Enqueue(task);
             task.Wait();
             return task.Result;
         }
 
 
-        static public bool getBool(Func<bool> func)
+        public static bool GetBool(Func<bool> func)
         {
-            return getData<bool>(func);
+            return GetData(func);
         }
 
-        static public void waitFor(Func<bool> func)
+        public static void WaitFor(Func<bool> func)
         {
             Task<bool> task;
             do
             {
                 task = new Task<bool>(func);
-                Snowshoes.tasks.Enqueue(task);
+                Snowshoes.Tasks.Enqueue(task);
                 task.Wait();
             } while (!task.Result);
-
         }
 
-        static public void waitForExclusively(Func<bool> func)
+        public static void WaitForExclusively(Func<bool> func)
         {
             Snowshoes.Pause();
             Task<bool> task;
             do
             {
                 task = new Task<bool>(func);
-                Snowshoes.high_priority.Enqueue(task);
-                
+                Snowshoes.HighPriority.Enqueue(task);
+
                 task.Wait();
             } while (!task.Result);
 
             Snowshoes.Start();
-
         }
 
-        static public void waitForExclusivelyAfterAction(Action act, Func<bool> func)
+        public static void WaitForExclusivelyAfterAction(Action act, Func<bool> func)
         {
             Snowshoes.Pause();
-            Snowshoes.high_priority.Enqueue(new Task(act));
+            Snowshoes.HighPriority.Enqueue(new Task(act));
 
             Task<bool> task;
             do
             {
-                
                 task = new Task<bool>(func);
-                Snowshoes.high_priority.Enqueue(task);
-                
+                Snowshoes.HighPriority.Enqueue(task);
+
                 task.Wait();
             } while (!task.Result);
 
             Snowshoes.Start();
-
         }
 
-        static public void performAction(Action act)
+        public static void PerformAction(Action act)
         {
-            Task task = new Task(act);
-            Snowshoes.tasks.Enqueue(task);
+            var task = new Task(act);
+            Snowshoes.Tasks.Enqueue(task);
             task.Wait();
         }
 
-        
+
         private void Run()
         {
             try
             {
-                while (true && !stopping)
+                while (!_stopping)
                 {
                     if (Snowshoes.CurrStatus == Status.Running || ImmuneToPause)
                     {
-                        ticks_start = System.Environment.TickCount;
-                        loop();
+                        _ticksStart = Environment.TickCount;
+                        Loop();
                     }
 
-                    Thread.Sleep(delay);
+                    Thread.Sleep(_delay);
                 }
             }
-            catch (ThreadAbortException) { }    ;
-
+            catch (ThreadAbortException)
+            {
+            }
         }
 
         protected void Stop()
         {
-            stopping = true;
+            _stopping = true;
         }
 
         public void HardRestart()
         {
-            thread.Abort();
-            thread = new Thread(Run);
-            thread.Start();
+            _thread.Abort();
+            _thread = new Thread(Run);
+            _thread.Start();
         }
 
 
-        abstract protected void loop();
+        protected abstract void Loop();
     }
 }

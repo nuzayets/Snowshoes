@@ -1,28 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿#region
 
+using System;
 using D3;
+using Snowshoes.Classes;
+
+#endregion
 
 namespace Snowshoes.Common
 {
     public static class Attack
     {
-        private static TimeSpan defaultTimeout = TimeSpan.FromSeconds(20);
+        #region Delegates
 
         public delegate bool UnitCheckCallback(Unit unit);
 
-        static public void init()
+        #endregion
+
+        private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(20);
+
+        public static void Init()
         {
             //Classes.Barbarian.init();
             //Classes.WitchDoctor.init();
             //Classes.Wizard.init();
             //Classes.Monk.init();
-            Classes.DemonHunter.init();
+            DemonHunter.Init();
         }
 
-        static public bool AttackUnit(Unit unit, TimeSpan timeout)
+        public static bool AttackUnit(Unit unit, TimeSpan timeout)
         {
             if (unit.Type == UnitType.Monster
                 && unit.GetAttributeInteger(UnitAttribute.Is_NPC) == 0
@@ -34,28 +39,30 @@ namespace Snowshoes.Common
                     case SNOActorId.Barbarian_Male:
                     case SNOActorId.Barbarian_Female:
                         //return Classes.Barbarian.AttackUnit(unit, timeout);
+                        break;
                     case SNOActorId.WitchDoctor_Male:
                     case SNOActorId.WitchDoctor_Female:
                         //return Classes.WitchDoctor.AttackUnit(unit, timeout);
+                        break;
                     case SNOActorId.Wizard_Male:
                     case SNOActorId.Wizard_Female:
                         //return Classes.Wizard.AttackUnit(unit, timeout);
+                        break;
                     case SNOActorId.Demonhunter_Male:
                     case SNOActorId.Demonhunter_Female:
-                        return Classes.DemonHunter.AttackUnit(unit, timeout);
+                        return DemonHunter.AttackUnit(unit, timeout);
                     case SNOActorId.Monk_Male:
                     case SNOActorId.Monk_Female:
                         //return Classes.Monk.AttackUnit(unit, timeout);
-                    default:
                         break;
                 }
             }
             return false;
         }
 
-        static public bool AttackUnit(Unit unit)
+        public static bool AttackUnit(Unit unit)
         {
-            return AttackUnit(unit, defaultTimeout);
+            return AttackUnit(unit, DefaultTimeout);
         }
     }
 }
