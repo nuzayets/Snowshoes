@@ -19,7 +19,7 @@ namespace Snowshoes.Common
 
         protected override void Loop()
         {
-            if (!GetBool(() => Game.Ingame && Me.LevelArea.ToString() != "Axe_Bad_Data") || Me.Life > 0) return;
+            if (!GetBool(() => Game.Ingame && Me.LevelArea != SNOLevelArea.Axe_Bad_Data || Me.Life > 0)) return;
             Snowshoes.Print(string.Format("Death {0}!", ++_deaths));
             _dependent.HardRestart();
         }

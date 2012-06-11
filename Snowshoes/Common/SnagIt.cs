@@ -1,6 +1,5 @@
 ﻿#region
 
-using System;
 using System.Linq;
 using System.Threading;
 using D3;
@@ -114,7 +113,7 @@ namespace Snowshoes.Common
                     Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory)).Where(CheckItemSalvage))
             {
                 Sherpa.GetBool(item.SalvageItem);
-                Thread.Sleep(50);
+                Thread.Sleep(Game.Ping);
             }
         }
 
@@ -125,7 +124,7 @@ namespace Snowshoes.Common
                     Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory)).Where(CheckItemSell))
             {
                 Sherpa.PerformAction(item.SellItem);
-                Thread.Sleep(50);
+                Thread.Sleep(Game.Ping);
             }
         }
 
@@ -136,7 +135,7 @@ namespace Snowshoes.Common
                     Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory)).Where(CheckItemStash))
             {
                 Sherpa.GetBool(item.UseItem);
-                Thread.Sleep(50);
+                Thread.Sleep(Game.Ping);
             }
         }
     }

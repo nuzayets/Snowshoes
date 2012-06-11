@@ -40,13 +40,13 @@ namespace Snowshoes.Bots
             Walk(2966, 2825);
             Walk(2941.5f, 2850.7f);
             Interact("Salvage");
-            Thread.Sleep(500); // must we really!!
+            Thread.Sleep(Game.Ping * 2); // must we really!!
             SnagIt.SalvageItems();
 
             Walk(2940, 2813);
             Walk(2895, 2785);
             Interact("Tashun the Miner");
-            Thread.Sleep(500); // god the humanity...
+            Thread.Sleep(Game.Ping * 2); // god the humanity...
             RepairAll();
             SnagIt.SellItems();
 
