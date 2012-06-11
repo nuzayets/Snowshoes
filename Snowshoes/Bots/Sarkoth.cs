@@ -29,56 +29,38 @@ namespace Snowshoes.Bots
                 GetBool(() => Me.GetContainerItems(Container.Inventory).Sum(item => item.ItemSizeX*item.ItemSizeY) >= 40);
         }
 
-        private void RepairAndSell()
+        private static void TownRun()
         {
             if (!NeedsRepair() && !IsInventoryStuffed()) return;
+            
             GoTown();
 
-            Walk(2897, 2786); // walk to Tashun
+            SnagIt.IdentifyAll();
 
+            Walk(2966, 2825);
+            Walk(2941.5f, 2850.7f);
+            Interact("Salvage");
+            Thread.Sleep(500); // must we really!!
+            SnagIt.SalvageItems();
 
-            PerformAction(() => UIElement.Get(0xDAECD77F9F0DCFB).Click());
-            // open your inventory - necessary for identify
-
-            Thread.Sleep(500); // eh. just in case.
-
-            var inventory = GetData(() => Me.GetContainerItems(Container.Inventory));
-
-
-            foreach (var item in inventory.Where(item => !item.ItemIdentified))
-            {
-                PerformAction(() => item.UseItem());
-                WaitFor(() => item.ItemIdentified);
-            }
-
-            Thread.Sleep(750);
-
+            Walk(2940, 2813);
+            Walk(2895, 2785);
             Interact("Tashun the Miner");
-
-            Thread.Sleep(500);
-
+            Thread.Sleep(500); // god the humanity...
             RepairAll();
+            SnagIt.SellItems();
 
-
-            foreach (var item1 in from item in GetData(() => Me.GetContainerItems(Container.Inventory))
-                                  where
-                                      item.ItemQuality >= UnitItemQuality.Magic1 &&
-                                      item.ItemQuality < UnitItemQuality.Legendary
-                                  let wpMax = item.GetAttributeInteger(UnitAttribute.Damage_Weapon_Max_Total_All)
-                                  let wpMin = item.GetAttributeInteger(UnitAttribute.Damage_Weapon_Min_Total_All)
-                                  let mf = item.GetAttributeReal(UnitAttribute.Magic_Find)
-                                  let gf = item.GetAttributeReal(UnitAttribute.Gold_Find)
-                                  where !(wpMax/(float) wpMin >= 750 || mf >= 0.19 || gf >= 0.19)
-                                  select item)
-            {
-                PerformAction(item1.SellItem);
-                Thread.Sleep(50);
-            }
+            Walk(2933, 2789);
+            Walk(2969, 2791);
+            Interact("Stash");
+            SnagIt.StashItems();
 
 
             Walk(2977, 2799);
             TakePortal();
         }
+
+
 
         protected override void Loop()
         {
@@ -99,7 +81,6 @@ namespace Snowshoes.Bots
             var cellar = GetData(() => Unit.Get().FirstOrDefault(u => u.Name.Contains("Dank Cellar")));
             if (cellar == default(Unit))
             {
-                //goTown();
                 ExitGame();
                 var runTime = Math.Round((Environment.TickCount - ticks)/1000m, 0);
                 _failures.Add(runTime);
@@ -128,7 +109,7 @@ namespace Snowshoes.Bots
 
             Walk(118, 138);
 
-            RepairAndSell();
+            TownRun();
 
             KillAll();
             PerformAction(() => Me.UsePower(SNOPowerId.DemonHunter_SmokeScreen));
@@ -138,8 +119,6 @@ namespace Snowshoes.Bots
 
             Snowshoes.Print(string.Format("Collected {0}k!", Math.Round((GetData(() => Me.Gold) - goldStart)/1000m, 1)));
 
-
-            //goTown();
 
 
             var srunTime = Math.Round((Environment.TickCount - ticks)/1000m, 0);

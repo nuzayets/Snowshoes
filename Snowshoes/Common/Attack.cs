@@ -18,15 +18,6 @@ namespace Snowshoes.Common
 
         private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(20);
 
-        public static void Init()
-        {
-            //Classes.Barbarian.init();
-            //Classes.WitchDoctor.init();
-            //Classes.Wizard.init();
-            //Classes.Monk.init();
-            DemonHunter.Init();
-        }
-
         public static bool AttackUnit(Unit unit, TimeSpan timeout)
         {
             if (unit.Type == UnitType.Monster

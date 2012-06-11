@@ -56,6 +56,8 @@ namespace Snowshoes
 
             new GoldMonitor(500);
             new Sarkoth();
+            //new TestBot();
+
         }
 
 

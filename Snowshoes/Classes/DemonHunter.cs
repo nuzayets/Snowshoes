@@ -11,15 +11,14 @@ namespace Snowshoes.Classes
 {
     public static class DemonHunter
     {
-        public static Spell Primary = new Spell(SNOPowerId.DemonHunter_HungeringArrow, 0, 0, 0, true);
-        public static Spell Secondary = new Spell(SNOPowerId.DemonHunter_ClusterArrow, 0, 50, 0, true);
+        public static readonly Spell Primary = new Spell(SNOPowerId.DemonHunter_HungeringArrow, 0, 0);
+        public static readonly Spell Secondary = new Spell(SNOPowerId.DemonHunter_ClusterArrow, 50, 0);
 
+        public static readonly Spell Vault = new Spell(SNOPowerId.DemonHunter_Vault, 0, 0);
+        public static readonly Spell Preparation = new Spell(SNOPowerId.DemonHunter_Preparation, 0, 0);
+        public static readonly Spell Companion = new Spell(SNOPowerId.DemonHunter_Companion, 0, 0);
+        public static readonly Spell SmokeScreen = new Spell(SNOPowerId.DemonHunter_SmokeScreen, 0, 0);
 
-        public static void Init()
-        {
-            Primary.Init();
-            Secondary.Init();
-        }
 
         public static bool AttackUnit(Unit unit, TimeSpan timeout)
         {

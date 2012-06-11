@@ -85,5 +85,14 @@ namespace Snowshoes.UI
             e.Cancel = true;
             WindowState = FormWindowState.Minimized;
         }
+
+        private void DumpAllUnitsToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            var units = Sherpa.GetData(D3.Unit.Get);
+            foreach (var unit in units)
+            {
+                PrintLine(String.Format("Unit: {0}", unit.Name));
+            }
+        }
     }
 }

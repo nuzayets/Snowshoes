@@ -11,7 +11,7 @@ namespace Snowshoes
 {
     internal abstract class AbstractBotSherpa : Sherpa
     {
-        protected void StartGame()
+        protected static void StartGame()
         {
             if (GetBool(() => Game.Ingame))
             {
@@ -36,7 +36,7 @@ namespace Snowshoes
             WaitFor(() => Game.Ingame && Me.LevelArea.ToString() != "Axe_Bad_Data");
         }
 
-        protected void ExitGame()
+        protected static void ExitGame()
         {
             var ui = GetData(() => UIElement.Get(0x5DB09161C4D6B4C6));
 
@@ -47,13 +47,13 @@ namespace Snowshoes
             }
         }
 
-        protected bool NeedsRepair()
+        protected static bool NeedsRepair()
         {
             var indicator = GetData(() => UIElement.Get(0xBD8B3C3679D4F4D9));
             return (indicator != default(UIElement) && indicator.Visible);
         }
 
-        protected void GoTown()
+        protected static void GoTown()
         {
             if (GetBool(() => Me.InTown)) return;
 
@@ -62,7 +62,7 @@ namespace Snowshoes
             WaitFor(() => Me.InTown);
         }
 
-        protected bool TakePortal()
+        protected static bool TakePortal()
         {
             if (GetBool(() => !Me.InTown))
             {
@@ -95,7 +95,7 @@ namespace Snowshoes
         }
 
 
-        protected void Walk(float x, float y)
+        protected static void Walk(float x, float y)
         {
             PerformAction(() => Me.UsePower(SNOPowerId.Walk, x, y, Me.Z));
             while (GetDistance(x, y) > 10)
@@ -108,7 +108,7 @@ namespace Snowshoes
             }
         }
 
-        protected void Interact(Unit u)
+        protected static void Interact(Unit u)
         {
             if (u.Type != UnitType.Gizmo && u.Type != UnitType.Monster && u.Type != UnitType.Item) return;
 
@@ -119,13 +119,13 @@ namespace Snowshoes
                             u));
         }
 
-        protected void Interact(string name)
+        protected static void Interact(string name)
         {
             var unit = GetData(() => Unit.Get().Where(x => x.Name.Contains(name)).FirstOrDefault());
             Interact(unit);
         }
 
-        protected void RepairAll()
+        protected static void RepairAll()
         {
             var btn = GetData(() => UIElement.Get(0x80F5D06A035848A5));
             if (btn != default(UIElement))
@@ -134,7 +134,7 @@ namespace Snowshoes
             }
         }
 
-        protected void KillAll()
+        protected static void KillAll()
         {
             var mobs = WaitForMobs(0);
             while (mobs.Length > 0)
@@ -144,7 +144,7 @@ namespace Snowshoes
             }
         }
 
-        protected Unit[] WaitForMobs(uint timeout)
+        protected static Unit[] WaitForMobs(uint timeout)
         {
             var mobs =
                 GetData(
@@ -177,7 +177,7 @@ namespace Snowshoes
             return mobs;
         }
 
-        protected void KillThese(Unit[] units)
+        protected static void KillThese(Unit[] units)
         {
             units = units.OrderBy(u1 => GetDistance(u1.X, u1.Y, GetData(() => Me.X), GetData(() => Me.Y))).ToArray();
             for (uint i = 0; i < units.Length; ++i)

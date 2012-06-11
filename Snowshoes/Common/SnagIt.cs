@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Linq;
 using System.Threading;
 using D3;
@@ -12,23 +13,12 @@ namespace Snowshoes.Common
     {
         public static void SnagItems()
         {
-            //var items = Sherpa.getData<D3.Unit[]>(() => D3.Unit.Get().Where(x => x.Type == D3.UnitType.Item && x.ItemContainer == D3.Container.Unknown && CheckItem(x)).OrderBy(i => Sherpa.GetDistance(i.X, i.Y, Sherpa.getData<float>(() => D3.Me.X), Sherpa.getData<float>(() => D3.Me.Y))).ToArray());
-            //while (items.Any())
-            //{
-            //    while (items[0].Valid == true && items[0].ItemContainer != D3.Container.Inventory)
-            //    {
-            //        Sherpa.performAction(() => D3.Me.UsePower(items[0].Type == D3.UnitType.Gizmo || items[0].Type == D3.UnitType.Item ? D3.SNOPowerId.Axe_Operate_Gizmo : D3.SNOPowerId.Axe_Operate_NPC, items[0]));
-            //        Thread.Sleep(100);
-            //    }
-            //    items = items.Where(x => x.Type == D3.UnitType.Item && x.ItemContainer == D3.Container.Unknown).OrderBy(i => Sherpa.GetDistance(i.X, i.Y, Sherpa.getData<float>(() => D3.Me.X), Sherpa.getData<float>(() => D3.Me.Y))).ToArray();
-            //}
-
-
             var items =
                 Sherpa.GetData(
                     () =>
                     Unit.Get().Where(
-                        x => x.Type == UnitType.Item && x.ItemContainer == Container.Unknown && CheckItem(x)).ToArray());
+                        x => x.Type == UnitType.Item && x.ItemContainer == Container.Unknown && CheckItemSnag(x)).
+                        ToArray());
             while (items.Any())
             {
                 var items1 = items;
@@ -43,12 +33,38 @@ namespace Snowshoes.Common
                     Sherpa.GetData(
                         () =>
                         Unit.Get().Where(
-                            x => x.Type == UnitType.Item && x.ItemContainer == Container.Unknown && CheckItem(x)).
+                            x => x.Type == UnitType.Item && x.ItemContainer == Container.Unknown && CheckItemSnag(x)).
                             ToArray());
             }
         }
 
-        public static bool CheckItem(Unit unit)
+        public static void IdentifyAll()
+        {
+            Sherpa.PerformAction(() => UIElement.Get(0xDAECD77F9F0DCFB).Click());
+            // open your inventory - necessary for identify
+
+            Thread.Sleep(Game.Ping*2); // eh. just in case.
+
+            var inventory = Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory));
+
+            foreach (var item in inventory.Where(item => !item.ItemIdentified))
+            {
+                var item1 = item;
+                Sherpa.PerformAction(() => item1.UseItem());
+                Sherpa.WaitFor(() => item1.ItemIdentified);
+            }
+        }
+
+        public static bool CheckItemStash(Unit i)
+        {
+            return i.ItemQuality >= UnitItemQuality.Rare4
+                   || i.Name.Contains("Topaz (30)") || i.Name.Contains("Amethyst (30)") ||
+                   i.Name.Contains("Emerald (30)") || i.Name.Contains("Ruby (30)")
+                   || i.Name.Contains("Essence (100)") || i.Name.Contains("Tear (100)") || i.Name.Contains("Hoof (100)") ||
+                   i.Name.Contains("Plan");
+        }
+
+        public static bool CheckItemSnag(Unit unit)
         {
             return unit.ActorId == SNOActorId.GoldCoins
                    || unit.ActorId == SNOActorId.GoldLarge
@@ -57,10 +73,71 @@ namespace Snowshoes.Common
                    || unit.Name.Contains("Flawless") // gems
                    || unit.Name.Contains("Plan")
                    || unit.Name.Contains("Design")
-                   || unit.Name.Contains("Book ") // crafting materials
+                   || unit.Name.Contains("Book") // crafting materials
                    || unit.Name.Contains("Tome")
                    || unit.Name.Contains("Mythic") // Health potions
                    || unit.ItemQuality >= UnitItemQuality.Magic1;
+        }
+
+        public static bool CheckItemSalvage(Unit unit)
+        {
+            return !unit.Name.Contains("Book ") // crafting materials
+                   && !unit.Name.Contains("Tome")
+                   && !unit.Name.Contains("Plan")
+                   && !unit.Name.Contains("Essence")
+                   && !unit.Name.Contains("Tear")
+                   && !unit.Name.Contains("Hoof")
+                   && !unit.Name.Contains("Brimstone")
+                   && unit.ItemQuality < UnitItemQuality.Legendary
+                   && unit.ItemQuality >= UnitItemQuality.Magic1
+                   && unit.ItemLevelRequirement == 60;
+        }
+
+        public static bool CheckItemSell(Unit unit)
+        {
+            return !unit.Name.Contains("Book ") // crafting materials
+                   && !unit.Name.Contains("Tome")
+                   && !unit.Name.Contains("Plan")
+                   && !unit.Name.Contains("Essence")
+                   && !unit.Name.Contains("Tear")
+                   && !unit.Name.Contains("Hoof")
+                   && !unit.Name.Contains("Brimstone")
+                   && unit.ItemQuality < UnitItemQuality.Legendary
+                   && unit.ItemQuality >= UnitItemQuality.Magic1
+                   && unit.ItemLevelRequirement < 60;
+        }
+
+        internal static void SalvageItems()
+        {
+            foreach (
+                var item in
+                    Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory)).Where(CheckItemSalvage))
+            {
+                Sherpa.GetBool(item.SalvageItem);
+                Thread.Sleep(50);
+            }
+        }
+
+        internal static void SellItems()
+        {
+            foreach (
+                var item in
+                    Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory)).Where(CheckItemSell))
+            {
+                Sherpa.PerformAction(item.SellItem);
+                Thread.Sleep(50);
+            }
+        }
+
+        internal static void StashItems()
+        {
+            foreach (
+                var item in
+                    Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory)).Where(CheckItemStash))
+            {
+                Sherpa.GetBool(item.UseItem);
+                Thread.Sleep(50);
+            }
         }
     }
 }

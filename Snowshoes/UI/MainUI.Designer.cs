@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label label1;
             System.Windows.Forms.Label label2;
             System.Windows.Forms.Label label5;
@@ -40,10 +41,13 @@
             this.lblGold = new System.Windows.Forms.Label();
             this.lblDeltaGold = new System.Windows.Forms.Label();
             this.lblGph = new System.Windows.Forms.Label();
+            this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.dumpAllUnitsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
             label7 = new System.Windows.Forms.Label();
+            this.contextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -55,12 +59,39 @@
             label1.TabIndex = 1;
             label1.Text = "Status:";
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new System.Drawing.Point(13, 30);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(32, 13);
+            label2.TabIndex = 6;
+            label2.Text = "Gold:";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new System.Drawing.Point(104, 30);
+            label5.Name = "label5";
+            label5.Size = new System.Drawing.Size(38, 13);
+            label5.TabIndex = 8;
+            label5.Text = "+Gold:";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new System.Drawing.Point(203, 30);
+            label7.Name = "label7";
+            label7.Size = new System.Drawing.Size(52, 13);
+            label7.TabIndex = 10;
+            label7.Text = "+Gold/hr:";
+            // 
             // outputBox
             // 
             this.outputBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.outputBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.outputBox.Location = new System.Drawing.Point(12, 54);
+            this.outputBox.Location = new System.Drawing.Point(12, 55);
             this.outputBox.Multiline = true;
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
@@ -115,15 +146,6 @@
             this.start.UseVisualStyleBackColor = true;
             this.start.Click += new System.EventHandler(this.StartClick);
             // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(13, 30);
-            label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(32, 13);
-            label2.TabIndex = 6;
-            label2.Text = "Gold:";
-            // 
             // lblGold
             // 
             this.lblGold.AutoSize = true;
@@ -142,15 +164,6 @@
             this.lblDeltaGold.TabIndex = 9;
             this.lblDeltaGold.Text = "N/A";
             // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new System.Drawing.Point(104, 30);
-            label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(38, 13);
-            label5.TabIndex = 8;
-            label5.Text = "+Gold:";
-            // 
             // lblGph
             // 
             this.lblGph.AutoSize = true;
@@ -160,20 +173,25 @@
             this.lblGph.TabIndex = 11;
             this.lblGph.Text = "N/A";
             // 
-            // label7
+            // contextMenu
             // 
-            label7.AutoSize = true;
-            label7.Location = new System.Drawing.Point(203, 30);
-            label7.Name = "label7";
-            label7.Size = new System.Drawing.Size(52, 13);
-            label7.TabIndex = 10;
-            label7.Text = "+Gold/hr:";
+            this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dumpAllUnitsToolStripMenuItem});
+            this.contextMenu.Name = "contextMenu";
+            this.contextMenu.Size = new System.Drawing.Size(153, 48);
+            // 
+            // dumpAllUnitsToolStripMenuItem
+            // 
+            this.dumpAllUnitsToolStripMenuItem.Name = "dumpAllUnitsToolStripMenuItem";
+            this.dumpAllUnitsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dumpAllUnitsToolStripMenuItem.Text = "Dump all units";
+            this.dumpAllUnitsToolStripMenuItem.Click += new System.EventHandler(this.DumpAllUnitsToolStripMenuItemClick);
             // 
             // MainUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(510, 281);
+            this.ClientSize = new System.Drawing.Size(510, 282);
             this.Controls.Add(this.lblGph);
             this.Controls.Add(label7);
             this.Controls.Add(this.lblDeltaGold);
@@ -190,6 +208,7 @@
             this.Name = "MainUI";
             this.Text = "Snowshoes";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainUIFormClosing);
+            this.contextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -205,5 +224,7 @@
         private System.Windows.Forms.Label lblGold;
         private System.Windows.Forms.Label lblDeltaGold;
         private System.Windows.Forms.Label lblGph;
+        private System.Windows.Forms.ContextMenuStrip contextMenu;
+        private System.Windows.Forms.ToolStripMenuItem dumpAllUnitsToolStripMenuItem;
     }
 }
