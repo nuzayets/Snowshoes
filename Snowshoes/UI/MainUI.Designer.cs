@@ -88,8 +88,8 @@
             // 
             // outputBox
             // 
-            this.outputBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.outputBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.outputBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.outputBox.Location = new System.Drawing.Point(12, 55);
             this.outputBox.Multiline = true;
@@ -192,6 +192,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(510, 282);
+            this.ContextMenuStrip = this.contextMenu;
             this.Controls.Add(this.lblGph);
             this.Controls.Add(label7);
             this.Controls.Add(this.lblDeltaGold);

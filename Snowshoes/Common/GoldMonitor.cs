@@ -28,7 +28,7 @@ namespace Snowshoes.Common
 
         protected override void Loop()
         {
-            var gold = GetData(() => Game.Ingame && Me.LevelArea != SNOLevelArea.Axe_Bad_Data ? Me.Gold : 0);
+            var gold = GetData(() => Game.Ingame ? Me.Gold : 0);
             if (gold == 0) return;
 
             if (_goldStart == 0)

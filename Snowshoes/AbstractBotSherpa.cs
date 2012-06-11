@@ -33,7 +33,7 @@ namespace Snowshoes
 
             PerformAction(() => resumeGame[0].Click());
 
-            WaitFor(() => Game.Ingame && Me.LevelArea == SNOLevelArea.Axe_Bad_Data);
+            WaitFor(() => Game.Ingame);
         }
 
         protected static void ExitGame()
@@ -43,7 +43,7 @@ namespace Snowshoes
             if (ui != null)
             {
                 WaitForExclusivelyAfterAction(ui.Click,
-                                              () => !Game.Ingame && Me.LevelArea == SNOLevelArea.Axe_Bad_Data);
+                                              () => !Game.Ingame);
             }
         }
 

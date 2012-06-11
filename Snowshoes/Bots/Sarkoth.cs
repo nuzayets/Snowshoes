@@ -19,7 +19,7 @@ namespace Snowshoes.Bots
         public Sarkoth()
         {
             new Watchdog(2500, this);
-            new DeathMonitor(250, this);
+            new DeathMonitor(500, this);
         }
 
 

@@ -63,21 +63,21 @@ namespace Snowshoes
 
         public static void Stop()
         {
-            Print("Stopping.");
+            //Print("Stopping.");
 
             CurrStatus = Status.Stopped;
         }
 
         public static void Start()
         {
-            Print("Starting.");
+            //Print("Starting.");
 
             CurrStatus = Status.Running;
         }
 
         public static void Pause()
         {
-            Print("Pausing.");
+            //Print("Pausing.");
 
             CurrStatus = Status.Paused;
         }
