@@ -30,8 +30,6 @@ namespace Snowshoes
         private static Status _status;
 
         private static MainUI _mainWindow;
-        private static DebugUI _debugWindow;
-
         public static Status CurrStatus
         {
             get { return _status; }
@@ -50,11 +48,7 @@ namespace Snowshoes
         {
             _mainWindow = new MainUI();
             _mainWindow.Show();
-            if(args.Length > 0 && args[0] == "debug") {
-                _debugWindow = new DebugUI();
-                _debugWindow.Show();
-                new DebugMonitor(500,_debugWindow);
-            }
+
 
             CurrStatus = Status.Stopped; // start stopped
 
