@@ -113,10 +113,16 @@ namespace Snowshoes
             if (u.Type != UnitType.Gizmo && u.Type != UnitType.Monster && u.Type != UnitType.Item) return;
 
             Walk(u.X, u.Y);
-            PerformAction(
+
+            WaitFor(()=> Me.Mode != UnitMode.Running);
+
+            while (!GetBool(
                 () =>
                 Me.UsePower(u.Type == UnitType.Monster ? SNOPowerId.Axe_Operate_NPC : SNOPowerId.Axe_Operate_Gizmo,
-                            u));
+                            u)))
+            {
+                Thread.Sleep(Game.Ping);
+            };
         }
 
         protected static void Interact(string name)

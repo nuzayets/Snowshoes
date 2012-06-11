@@ -40,13 +40,13 @@ namespace Snowshoes.Bots
             Walk(2966, 2825);
             Walk(2941.5f, 2850.7f);
             Interact("Salvage");
-            Thread.Sleep(Game.Ping * 2); // must we really!!
+            //Thread.Sleep(Game.Ping * 2); // must we really!!
             SnagIt.SalvageItems();
 
             Walk(2940, 2813);
             Walk(2895, 2785);
             Interact("Tashun the Miner");
-            Thread.Sleep(Game.Ping * 2); // god the humanity...
+            //Thread.Sleep(Game.Ping * 2); // god the humanity...
             RepairAll();
             SnagIt.SellItems();
 
@@ -81,7 +81,7 @@ namespace Snowshoes.Bots
             var cellar = GetData(() => Unit.Get().FirstOrDefault(u => u.Name.Contains("Dank Cellar")));
             if (cellar == default(Unit))
             {
-                ExitGame();
+                
                 var runTime = Math.Round((Environment.TickCount - ticks)/1000m, 0);
                 _failures.Add(runTime);
                 Snowshoes.Print(String.Format("{0} secs failure run ({1} avg); {2}% success rate", runTime,
@@ -89,6 +89,7 @@ namespace Snowshoes.Bots
                                               Math.Round((_successes.Count/
                                                           (_failures.Count + (decimal) _successes.Count))*
                                                          100m)));
+                ExitGame();
                 return;
             }
 
@@ -105,9 +106,9 @@ namespace Snowshoes.Bots
             PerformAction(() => Me.UsePower(SNOPowerId.DemonHunter_SmokeScreen));
 
             Walk(108, 158);
-            Walk(129, 143);
+            Walk(114, 156);
 
-            Walk(118, 138);
+            Walk(123, 135);
 
             TownRun();
 

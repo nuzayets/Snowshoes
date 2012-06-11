@@ -15,10 +15,10 @@ namespace Snowshoes.Classes
         public static readonly Spell Secondary = new Spell(SNOPowerId.DemonHunter_ClusterArrow, 50, 0);
         public static readonly Spell AlternativeSecondary = new Spell(SNOPowerId.DemonHunter_Impale, 25, 0);
 
-        public static readonly Spell Vault = new Spell(SNOPowerId.DemonHunter_Vault, 0, 0);
+        public static readonly Spell Vault = new Spell(SNOPowerId.DemonHunter_Vault, 0, 8);
         public static readonly Spell Preparation = new Spell(SNOPowerId.DemonHunter_Preparation, 0, 0);
-        public static readonly Spell Companion = new Spell(SNOPowerId.DemonHunter_Companion, 0, 0);
-        public static readonly Spell SmokeScreen = new Spell(SNOPowerId.DemonHunter_SmokeScreen, 0, 0);
+        public static readonly Spell Companion = new Spell(SNOPowerId.DemonHunter_Companion, 0, 10);
+        public static readonly Spell SmokeScreen = new Spell(SNOPowerId.DemonHunter_SmokeScreen, 0, 14);
 
 
         public static bool AttackUnit(Unit unit, TimeSpan timeout)
