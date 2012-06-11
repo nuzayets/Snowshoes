@@ -112,7 +112,10 @@ namespace Snowshoes.Common
                 var item in
                     Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory)).Where(CheckItemSalvage))
             {
-                Sherpa.GetBool(item.SalvageItem);
+                var i = item;
+// ReSharper disable ConvertClosureToMethodGroup
+                Sherpa.GetBool(() => i.SalvageItem());
+// ReSharper restore ConvertClosureToMethodGroup
                 Thread.Sleep(Game.Ping);
             }
         }
@@ -123,7 +126,10 @@ namespace Snowshoes.Common
                 var item in
                     Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory)).Where(CheckItemSell))
             {
-                Sherpa.PerformAction(item.SellItem);
+                var i = item;
+// ReSharper disable ConvertClosureToMethodGroup
+                Sherpa.PerformAction(() => i.SellItem());
+// ReSharper restore ConvertClosureToMethodGroup
                 Thread.Sleep(Game.Ping);
             }
         }
@@ -134,7 +140,10 @@ namespace Snowshoes.Common
                 var item in
                     Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory)).Where(CheckItemStash))
             {
-                Sherpa.GetBool(item.UseItem);
+                var i = item;
+// ReSharper disable ConvertClosureToMethodGroup
+                Sherpa.GetBool(() => i.UseItem());
+// ReSharper restore ConvertClosureToMethodGroup
                 Thread.Sleep(Game.Ping);
             }
         }
