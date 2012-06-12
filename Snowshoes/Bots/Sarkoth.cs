@@ -93,8 +93,8 @@ namespace Snowshoes.Bots
                     break;
                 case SNOActorId.Monk_Male:
                 case SNOActorId.Monk_Female:
-                    throw new NotImplementedException();
-                    //break;
+                     if (!MonkCellarRun()) return;
+                    break;
             }
             
 
@@ -114,7 +114,6 @@ namespace Snowshoes.Bots
         private bool DemonHunterCellarRun()
         {
             WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_Vault, 1993f, 2603f, Me.Z));
-
             WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_SmokeScreen));
 
             Walk(2026.3f, 2557.1f);
@@ -134,16 +133,47 @@ namespace Snowshoes.Bots
 
             Interact(cellar);
 
-            WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_Vault, 125.8f, 160.1f, Me.Z));
-            Thread.Sleep(150);
-            Walk(125.8f, 160f);
+            WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_Vault, 121.5f, 157.4f, Me.Z));
 
-            Walk(122.4f, 143f);
+            Walk(120.5f, 137.8f);
 
             TownRun();
 
             KillAll();
             WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_Vault));
+            return true;
+        }
+
+        private bool MonkCellarRun()
+        {
+            WaitFor(() => Me.UsePower(SNOPowerId.Monk_MysticAlly));
+            WaitFor(() => Me.UsePower(SNOPowerId.Monk_BreathOfHeaven));
+
+            Walk(2026.3f, 2557.1f);
+
+            Thread.Sleep(Game.Ping * 2);
+            Unit cellar = CheckForCellar();
+            if (cellar == null) return false;
+
+            Walk(2046.2f, 2527.7f);
+
+            Walk(2078.7f, 2492f);
+
+            Walk(2066, 2477);
+
+            Interact(cellar);
+
+            Walk(120.5f, 137.8f);
+
+            TownRun();
+
+            Walk(118.0f, 104.0f);
+
+            WaitFor(() => Me.UsePower(SNOPowerId.Monk_MantraOfConviction));
+            KillAll();
+
+            Thread.Sleep(Math.Min(Game.Ping * 3,300));
+            
             return true;
         }
 

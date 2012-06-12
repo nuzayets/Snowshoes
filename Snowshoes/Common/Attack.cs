@@ -44,8 +44,7 @@ namespace Snowshoes.Common
                         return DemonHunter.AttackUnit(unit, timeout);
                     case SNOActorId.Monk_Male:
                     case SNOActorId.Monk_Female:
-                        //return Classes.Monk.AttackUnit(unit, timeout);
-                        break;
+                        return Monk.AttackUnit(unit, timeout);
                 }
             }
             return false;
