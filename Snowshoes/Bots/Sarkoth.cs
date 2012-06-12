@@ -169,6 +169,7 @@ namespace Snowshoes.Bots
 
             Walk(118.0f, 104.0f);
 
+            WaitFor(() => Me.UsePower(SNOPowerId.Monk_MantraOfConviction));
             KillAll();
 
             Thread.Sleep(Math.Min(Game.Ping * 3,300));
