@@ -86,7 +86,7 @@ namespace Snowshoes.Common
                    && !unit.Name.Contains("Essence")
                    && !unit.Name.Contains("Tear")
                    && !unit.Name.Contains("Hoof")
-                   && !unit.Name.Contains("Brimstone")
+                   && !unit.Name.Contains("Fiery Brimstone")
                    && unit.ItemQuality < UnitItemQuality.Legendary
                    && unit.ItemQuality >= UnitItemQuality.Magic1
                    && unit.ItemLevelRequirement == 60;
@@ -100,7 +100,7 @@ namespace Snowshoes.Common
                    && !unit.Name.Contains("Essence")
                    && !unit.Name.Contains("Tear")
                    && !unit.Name.Contains("Hoof")
-                   && !unit.Name.Contains("Brimstone")
+                   && !unit.Name.Contains("Fiery Brimstone")
                    && unit.ItemQuality < UnitItemQuality.Legendary
                    && unit.ItemQuality >= UnitItemQuality.Magic1
                    && unit.ItemLevelRequirement < 60;

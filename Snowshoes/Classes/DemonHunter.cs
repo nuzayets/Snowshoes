@@ -12,7 +12,7 @@ namespace Snowshoes.Classes
     public static class DemonHunter
     {
         public static readonly Spell Primary = new Spell(SNOPowerId.DemonHunter_HungeringArrow, 0, 0);
-        public static readonly Spell Secondary = new Spell(SNOPowerId.DemonHunter_ClusterArrow, 50, 0);
+        public static readonly Spell Secondary = new Spell(SNOPowerId.DemonHunter_ClusterArrow, 55, 0);
         public static readonly Spell AlternativeSecondary = new Spell(SNOPowerId.DemonHunter_Impale, 25, 0);
 
         public static readonly Spell Vault = new Spell(SNOPowerId.DemonHunter_Vault, 0, 8);
