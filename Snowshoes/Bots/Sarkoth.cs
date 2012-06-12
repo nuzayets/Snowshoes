@@ -133,9 +133,9 @@ namespace Snowshoes.Bots
 
             Interact(cellar);
 
-            WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_Vault, 121.5f, 157.4f, Me.Z));
+            WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_Vault, 125.8f, 160.1f, Me.Z));
 
-            Walk(120.5f, 137.8f);
+            Walk(119.8f, 143.52f);
 
             TownRun();
 
