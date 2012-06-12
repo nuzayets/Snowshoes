@@ -136,6 +136,7 @@ namespace Snowshoes.Bots
 
             WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_Vault, 125.8f, 160.1f, Me.Z));
             Thread.Sleep(150);
+            Walk(125.8f, 160f);
 
             Walk(122.4f, 143f);
 
