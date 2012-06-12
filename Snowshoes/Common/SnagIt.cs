@@ -106,53 +106,57 @@ namespace Snowshoes.Common
                    && unit.ItemLevelRequirement < 60;
         }
 
-        internal static void SalvageItems()
+        public static void SalvageItems()
         {
-            var salvgUI =
-                Sherpa.GetData(
-                    () =>
-                    UIElement.Get().Where(x => x.Name.Contains("Root.NormalLayer.vendor_dialog_mainPage.salvage_dialog")).
-                        FirstOrDefault());
-            if (salvgUI == null || !salvgUI.Visible) return;
-            
-
-            foreach (
-                var item in
-                    Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory)).Where(CheckItemSalvage))
+            UIElement salvgUI = null;
+            while (salvgUI == null || !salvgUI.Visible)
             {
-                var i = item;
-// ReSharper disable ConvertClosureToMethodGroup
-                Sherpa.GetBool(() => i.SalvageItem());
-// ReSharper restore ConvertClosureToMethodGroup
-                Thread.Sleep(50);
+                salvgUI =
+                    Sherpa.GetData(
+                        () =>
+                        UIElement.Get().Where(
+                            x => x.Name.Contains("Root.NormalLayer.vendor_dialog_mainPage.salvage_dialog")).
+                            FirstOrDefault());
+            }
+
+
+            var items = Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory).Where(CheckItemSalvage).ToArray());
+            Snowshoes.Print(string.Format("Salvaging {0} items", items.Count()));
+            foreach (var i in items)
+            {
+                Unit i1 = i;
+                Sherpa.GetBool(i1.SalvageItem);
+                Thread.Sleep(Game.Ping);
             }
         }
 
-        internal static void SellItems()
+        public static void SellItems()
         {
-            foreach (
-                var item in
-                    Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory)).Where(CheckItemSell))
+            var items = Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory).Where(CheckItemSell).ToArray());
+            Snowshoes.Print(string.Format("Selling {0} items", items.Count()));
+            foreach (var i in items)
             {
-                var i = item;
-// ReSharper disable ConvertClosureToMethodGroup
-                Sherpa.PerformAction(() => i.SellItem());
-// ReSharper restore ConvertClosureToMethodGroup
-                Thread.Sleep(50);
+                Unit i1 = i;
+                Sherpa.PerformAction(i1.SellItem);
+                Thread.Sleep(Game.Ping);
             }
         }
 
-        internal static void StashItems()
+        public static void StashItems()
         {
-            var stashUI =
-                Sherpa.GetData(
-                    () =>
-                    UIElement.Get().Where(x => x.Name.Contains("Root.NormalLayer.stash_dialog_mainPage.panel")).
-                        FirstOrDefault());
-            if (stashUI == null || !stashUI.Visible) return;
 
-            Snowshoes.Print("OK to Stash!");
+            UIElement stashUI = null;
+            while (stashUI == null || !stashUI.Visible)
+            {
+                stashUI =
+                    Sherpa.GetData(
+                        () =>
+                        UIElement.Get().Where(
+                            x => x.Name.Contains("Root.NormalLayer.stash_dialog_mainPage.panel")).
+                            FirstOrDefault());
+            }
 
+  
             foreach (
                 var item in
                     Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory)).Where(CheckItemStash))
@@ -166,7 +170,7 @@ namespace Snowshoes.Common
                 }
                 Sherpa.PerformAction(() => i.MoveItem(Container.Stash, p.X, p.Y));
 // ReSharper restore ConvertClosureToMethodGroup
-                Thread.Sleep(50);
+                Thread.Sleep(Game.Ping*2);
             }
         }
     }
