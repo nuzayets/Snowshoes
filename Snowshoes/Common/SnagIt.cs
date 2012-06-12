@@ -108,6 +108,12 @@ namespace Snowshoes.Common
 
         internal static void SalvageItems()
         {
+            var salvgUI =
+                Sherpa.GetData(
+                    () =>
+                    UIElement.Get().Where(x => x.Name.Contains("Root.NormalLayer.vendor_dialog_mainPage.salvage_dialog")).
+                        FirstOrDefault());
+            if (salvgUI == null || !salvgUI.Visible) return;
             
 
             foreach (
