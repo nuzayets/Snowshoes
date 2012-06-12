@@ -110,7 +110,7 @@ namespace Snowshoes
                     break;
                 case SNOActorId.Wizard_Male:
                 case SNOActorId.Wizard_Female:
-                    Walk(x,y);
+                    Wizard.TeleportTo(x, y);
                     break;
                 case SNOActorId.Demonhunter_Male:
                 case SNOActorId.Demonhunter_Female:

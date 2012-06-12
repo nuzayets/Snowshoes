@@ -61,39 +61,6 @@ namespace Snowshoes.Bots
             TakePortal();
         }
 
-        private static void TownWalk()
-        {
-            if (!NeedsRepair() && !IsInventoryStuffed()) return;
-
-            GoTown();
-
-            SnagIt.IdentifyAll();
-
-            Walk(2966, 2825);
-            Walk(2941.5f, 2850.7f);
-            Interact("Salvage", false);
-            SnagIt.SalvageItems();
-
-            Walk(2940, 2813);
-            Walk(2895, 2782);
-            Interact("Tashun the Miner", false);
-            RepairAll();
-            SnagIt.SellItems();
-
-            Walk(2933, 2789);
-            Walk(2969, 2791);
-            Interact("Stash", false);
-            SnagIt.StashItems();
-
-
-            Walk(2977, 2799);
-            TakePortal();
-        }
-
-
-
-
-
         protected override void Loop()
         {
             StartGame();
@@ -165,7 +132,7 @@ namespace Snowshoes.Bots
             Walk(122.7955f, 154.2372f);
 
             KillAll();
-            TownWalk();
+            TownRun();
 
             return true;
         }
@@ -179,6 +146,8 @@ namespace Snowshoes.Bots
             WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_SmokeScreen));
 
             Walk(2026.3f, 2557.1f);
+
+            Thread.Sleep(Game.Ping);
             Unit cellar = CheckForCellar();
             if (cellar == null) return false;
 
