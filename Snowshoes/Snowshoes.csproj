@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="AbstractBotSherpa.cs" />
     <Compile Include="Bots\TestBot.cs" />
+    <Compile Include="Classes\Monk.cs" />
     <Compile Include="Common\GoldMonitor.cs" />
     <Compile Include="Bots\Sarkoth.cs" />
     <Compile Include="Classes\DemonHunter.cs" />

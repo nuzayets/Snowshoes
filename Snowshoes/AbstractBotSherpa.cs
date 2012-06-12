@@ -175,7 +175,7 @@ namespace Snowshoes
                         && x.GetAttributeInteger(UnitAttribute.Is_NPC) == 0 &&
                         x.GetAttributeInteger(UnitAttribute.Is_Helper) == 0
                         && x.GetAttributeInteger(UnitAttribute.Invulnerable) == 0 &&
-                        x.ActorId != SNOActorId.DemonHunter_SpikeTrapRune_multiTrap_Proxy).ToArray());
+                        x.ActorId != SNOActorId.DemonHunter_SpikeTrapRune_multiTrap_Proxy && x.ActorId != SNOActorId.Monk_male_mysticAlly_golden).ToArray());
             uint count = 0;
             while (mobs.Length <= 0 && count < 2*timeout)
             {
