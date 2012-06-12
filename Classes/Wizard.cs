@@ -34,7 +34,9 @@ namespace Snowshoes.Classes
             while (Sherpa.GetBool(() => unit.Life > 0))
             {
                 if (!Secondary.Use(unit))
+                {
                     Primary.Use(unit);
+                }
 
                 Thread.Sleep(200);
 
@@ -51,16 +53,19 @@ namespace Snowshoes.Classes
 
         public static bool TeleportTo(float x, float y)
         {
-            Snowshoes.Print("Attacking Unit");
-            while (Sherpa.GetDistance(x,y) > 10)
+            Snowshoes.Print(String.Format("Waypoint: {0}, {1}. Distance is: {2}, Game Ping: {3}", x, y, Sherpa.GetDistance(x, y), Game.Ping));
+            while (Sherpa.GetDistance(x, y) > 10)
             {
-                if (Sherpa.GetDistance(x, y) > 50 && Teleport.IsAvailableNow())
+                if (Sherpa.GetDistance(x, y) > 20 && Teleport.IsAvailableNow())
                 {
+                    Snowshoes.Print("Teleporting");
                     Teleport.Use(x, y);
                     Thread.Sleep(200);
+                    return true;
                 }
                 else
                 {
+                    Snowshoes.Print("Walking");
                     Sherpa.Walk(x, y);
                 }
             }

@@ -111,6 +111,7 @@ namespace Snowshoes.Bots
                 _successes.Count + _failures.Count
             ));
         }
+
         private bool WizardCellarRun()
         {
             WaitFor(() => Me.UsePower(SNOPowerId.Wizard_DiamondSkin));
@@ -129,10 +130,11 @@ namespace Snowshoes.Bots
             WaitFor(() => Me.UsePower(SNOPowerId.Wizard_Familiar));
             WaitFor(() => Me.UsePower(SNOPowerId.Wizard_MagicWeapon));
 
+            TownRun();
             Walk(122.7955f, 154.2372f);
+            Walk(123.2319f, 115.2870f);
 
             KillAll();
-            TownRun();
 
             return true;
         }
