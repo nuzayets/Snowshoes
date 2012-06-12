@@ -3,6 +3,7 @@
 using System.Linq;
 using System.Threading;
 using D3;
+using Snowshoes.Classes;
 using Snowshoes.Common;
 
 #endregion
@@ -95,18 +96,33 @@ namespace Snowshoes
         }
 
 
-        protected static void Walk(float x, float y)
+        protected static void MoveReallyFast(float x, float y)
         {
-            PerformAction(() => Me.UsePower(SNOPowerId.Walk, x, y, Me.Z));
-            while (GetDistance(x, y) > 10)
+            switch (Me.SNOId)
             {
-                if (GetBool(() => Me.Mode != UnitMode.Running))
-                {
-                    PerformAction(() => Me.UsePower(SNOPowerId.Walk, x, y, Me.Z));
-                }
-                Thread.Sleep(100);
+                case SNOActorId.Barbarian_Male:
+                case SNOActorId.Barbarian_Female:
+                    Walk(x,y);
+                    break;
+                case SNOActorId.WitchDoctor_Male:
+                case SNOActorId.WitchDoctor_Female:
+                    Walk(x,y);
+                    break;
+                case SNOActorId.Wizard_Male:
+                case SNOActorId.Wizard_Female:
+                    Walk(x,y);
+                    break;
+                case SNOActorId.Demonhunter_Male:
+                case SNOActorId.Demonhunter_Female:
+                    DemonHunter.MoveSuperFuckingFast(x, y);
+                    break;
+                case SNOActorId.Monk_Male:
+                case SNOActorId.Monk_Female:
+                    Walk(x,y);
+                    break;
             }
         }
+
 
         protected static void Interact(Unit u, bool walk = true)
         {

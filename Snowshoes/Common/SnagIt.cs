@@ -118,7 +118,7 @@ namespace Snowshoes.Common
 // ReSharper disable ConvertClosureToMethodGroup
                 Sherpa.GetBool(() => i.SalvageItem());
 // ReSharper restore ConvertClosureToMethodGroup
-                Thread.Sleep(Game.Ping);
+                Thread.Sleep(50);
             }
         }
 
@@ -132,7 +132,7 @@ namespace Snowshoes.Common
 // ReSharper disable ConvertClosureToMethodGroup
                 Sherpa.PerformAction(() => i.SellItem());
 // ReSharper restore ConvertClosureToMethodGroup
-                Thread.Sleep(Game.Ping);
+                Thread.Sleep(50);
             }
         }
 
@@ -160,7 +160,7 @@ namespace Snowshoes.Common
                 }
                 Sherpa.PerformAction(() => i.MoveItem(Container.Stash, p.X, p.Y));
 // ReSharper restore ConvertClosureToMethodGroup
-                Thread.Sleep(Game.Ping);
+                Thread.Sleep(50);
             }
         }
     }

@@ -46,5 +46,29 @@ namespace Snowshoes.Classes
 
             return true;
         }
+
+
+
+        public static bool MoveSuperFuckingFast(float x, float y)
+        {
+            while (Sherpa.GetDistance(x,y) > 10)
+            {
+                if (Sherpa.GetDistance(x, y) > 50 && Vault.IsAvailableNow() && Sherpa.GetData(() => Me.SecondaryResource) > 22)
+                {
+                    Vault.Use(x, y);
+                    Thread.Sleep(350);
+                } 
+                else if (Sherpa.GetDistance(x,y) > 30 && SmokeScreen.IsAvailableNow())
+                {
+                    SmokeScreen.Use();
+                    Sherpa.Walk(x, y);
+                } 
+                else
+                {
+                    Sherpa.Walk(x, y);
+                }
+            }
+            return true;
+        }
     }
 }

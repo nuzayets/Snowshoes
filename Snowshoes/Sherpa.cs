@@ -115,6 +115,18 @@ namespace Snowshoes
             task.Wait();
         }
 
+        public static void Walk(float x, float y)
+        {
+            PerformAction(() => Me.UsePower(SNOPowerId.Walk, x, y, Me.Z));
+            while (GetDistance(x, y) > 10)
+            {
+                if (GetBool(() => Me.Mode != UnitMode.Running))
+                {
+                    PerformAction(() => Me.UsePower(SNOPowerId.Walk, x, y, Me.Z));
+                }
+                Thread.Sleep(100);
+            }
+        }
 
         private void Run()
         {
