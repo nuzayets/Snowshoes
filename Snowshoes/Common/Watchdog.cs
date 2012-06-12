@@ -3,7 +3,7 @@
     internal class Watchdog : Sherpa
     {
         private readonly Sherpa _dependent;
-        private const int TimeoutSeconds = 90;
+        private const int TimeoutSeconds = 60;
 
         public Watchdog(int delay, Sherpa caller)
             : base(delay)

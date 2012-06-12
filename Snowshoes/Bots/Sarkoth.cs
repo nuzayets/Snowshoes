@@ -114,6 +114,7 @@ namespace Snowshoes.Bots
         private bool DemonHunterCellarRun()
         {
             WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_Vault, 1993f, 2603f, Me.Z));
+
             WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_SmokeScreen));
 
             Walk(2026.3f, 2557.1f);
@@ -133,14 +134,15 @@ namespace Snowshoes.Bots
 
             Interact(cellar);
 
-            WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_Vault, 121.5f, 157.4f, Me.Z));
+            WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_Vault, 125.8f, 160.1f, Me.Z));
+            Thread.Sleep(150);
 
-            Walk(120.5f, 137.8f);
+            Walk(122.4f, 143f);
 
             TownRun();
 
             KillAll();
-            WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_SmokeScreen));
+            WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_Vault));
             return true;
         }
 
