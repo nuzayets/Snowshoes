@@ -3,6 +3,7 @@
 ## Eclipse
 #################
 
+*.gitattributes
 *.pydevproject
 .project
 .metadata
