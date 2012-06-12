@@ -140,7 +140,7 @@ namespace Snowshoes.Bots
             TownRun();
 
             KillAll();
-            WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_SmokeScreen));
+            WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_Vault));
             return true;
         }
 
