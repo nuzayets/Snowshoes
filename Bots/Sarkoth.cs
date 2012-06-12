@@ -115,10 +115,10 @@ namespace Snowshoes.Bots
         {
             WaitFor(() => Me.UsePower(SNOPowerId.Wizard_DiamondSkin));
 
-            TeleportTo(1994.874f, 2619.641f);
-            TeleportTo(2013.623f, 2589.112f);
-            TeleportTo(2033.791f, 2560.457f);
-            TeleportTo(2054.950f, 2534.024f);
+            MoveReallyFast(1994.874f, 2619.641f);
+            MoveReallyFast(2013.623f, 2589.112f);
+            MoveReallyFast(2033.791f, 2560.457f);
+            MoveReallyFast(2054.950f, 2534.024f);
             Walk(2052.285f, 2530.787f);
 
             Unit cellar = CheckForCellar();
