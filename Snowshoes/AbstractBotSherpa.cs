@@ -26,7 +26,7 @@ namespace Snowshoes
                 PerformAction(okButton.Click);
             }
 
-            UIElement[] resumeGame = {null};
+            UIElement[] resumeGame = { null };
             while (resumeGame[0] == null || GetBool(() => !resumeGame[0].Visible))
             {
                 resumeGame[0] = GetData(() => UIElement.Get(0x51A3923949DC80B7));
@@ -102,15 +102,15 @@ namespace Snowshoes
             {
                 case SNOActorId.Barbarian_Male:
                 case SNOActorId.Barbarian_Female:
-                    Walk(x,y);
+                    Barbarian.SprintEverywhere(x, y);
                     break;
                 case SNOActorId.WitchDoctor_Male:
                 case SNOActorId.WitchDoctor_Female:
-                    Walk(x,y);
+                    Walk(x, y);
                     break;
                 case SNOActorId.Wizard_Male:
                 case SNOActorId.Wizard_Female:
-                    Walk(x,y);
+                    Walk(x, y);
                     break;
                 case SNOActorId.Demonhunter_Male:
                 case SNOActorId.Demonhunter_Female:
@@ -118,7 +118,7 @@ namespace Snowshoes
                     break;
                 case SNOActorId.Monk_Male:
                 case SNOActorId.Monk_Female:
-                    Walk(x,y);
+                    Walk(x, y);
                     break;
             }
         }
@@ -170,14 +170,14 @@ namespace Snowshoes
                     () =>
                     Unit.Get().Where(
                         x =>
-                        x.Type == UnitType.Monster && ((uint) x.MonsterType == 0 || (uint) x.MonsterType == 4) &&
+                        x.Type == UnitType.Monster && ((uint)x.MonsterType == 0 || (uint)x.MonsterType == 4) &&
                         x.Mode != UnitMode.Warping && x.Life > 0
                         && x.GetAttributeInteger(UnitAttribute.Is_NPC) == 0 &&
                         x.GetAttributeInteger(UnitAttribute.Is_Helper) == 0
                         && x.GetAttributeInteger(UnitAttribute.Invulnerable) == 0 &&
                         x.ActorId != SNOActorId.DemonHunter_SpikeTrapRune_multiTrap_Proxy).ToArray());
             uint count = 0;
-            while (mobs.Length <= 0 && count < 2*timeout)
+            while (mobs.Length <= 0 && count < 2 * timeout)
             {
                 Thread.Sleep(500);
                 mobs =
@@ -185,7 +185,7 @@ namespace Snowshoes
                         () =>
                         Unit.Get().Where(
                             x =>
-                            x.Type == UnitType.Monster && ((uint) x.MonsterType == 0 || (uint) x.MonsterType == 4) &&
+                            x.Type == UnitType.Monster && ((uint)x.MonsterType == 0 || (uint)x.MonsterType == 4) &&
                             x.Mode != UnitMode.Warping && x.Life > 0
                             && x.GetAttributeInteger(UnitAttribute.Is_NPC) == 0 &&
                             x.GetAttributeInteger(UnitAttribute.Is_Helper) == 0
