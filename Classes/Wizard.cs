@@ -22,6 +22,7 @@ namespace Snowshoes.Classes
 
         public static bool AttackUnit(Unit unit, TimeSpan timeout)
         {
+            Snowshoes.Print("Attacking Unit");
             if (Sherpa.GetBool(() => unit.Life <= 0))
             {
                 return false;
@@ -50,6 +51,7 @@ namespace Snowshoes.Classes
 
         public static bool TeleportTo(float x, float y)
         {
+            Snowshoes.Print("Attacking Unit");
             while (Sherpa.GetDistance(x,y) > 10)
             {
                 if (Sherpa.GetDistance(x, y) > 50 && Teleport.IsAvailableNow())

@@ -23,7 +23,7 @@ namespace Snowshoes.Common
         public bool IsAvailableNow()
         {
             return Sherpa.GetBool(
-               () => Me.PrimaryResource > PrimCost && Me.SecondaryResource > SecCost && Me.IsSkillReady(Id));
+               () => Me.PrimaryResource >= PrimCost && Me.SecondaryResource >= SecCost && Me.IsSkillReady(Id));
         }
 
         public bool Use(Unit target)

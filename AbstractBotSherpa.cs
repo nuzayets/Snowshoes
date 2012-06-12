@@ -44,7 +44,7 @@ namespace Snowshoes
             if (ui != null)
             {
                 WaitForExclusivelyAfterAction(ui.Click,
-                                              () => !Game.Ingame);
+                    () => !Game.Ingame);
             }
         }
 
