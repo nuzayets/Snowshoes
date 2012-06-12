@@ -117,6 +117,8 @@ namespace Snowshoes.Bots
             WaitFor(() => Me.UsePower(SNOPowerId.DemonHunter_SmokeScreen));
 
             Walk(2026.3f, 2557.1f);
+
+            Thread.Sleep(Game.Ping * 2);
             Unit cellar = CheckForCellar();
             if (cellar == null) return false;
 

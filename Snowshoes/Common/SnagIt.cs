@@ -84,7 +84,7 @@ namespace Snowshoes.Common
                    && !unit.Name.Contains("Tome")
                    && !unit.Name.Contains("Plan")
                    && !unit.Name.Contains("Essence")
-                   && !unit.Name.Contains("Tear")
+                   && !unit.Name.Contains("Iridescent Tear")
                    && !unit.Name.Contains("Hoof")
                    && !unit.Name.Contains("Fiery Brimstone")
                    && unit.ItemQuality < UnitItemQuality.Legendary
@@ -98,7 +98,7 @@ namespace Snowshoes.Common
                    && !unit.Name.Contains("Tome ")
                    && !unit.Name.Contains("Plan")
                    && !unit.Name.Contains("Essence")
-                   && !unit.Name.Contains("Tear")
+                   && !unit.Name.Contains("Iridescent Tear")
                    && !unit.Name.Contains("Hoof")
                    && !unit.Name.Contains("Fiery Brimstone")
                    && unit.ItemQuality < UnitItemQuality.Legendary
