@@ -13,9 +13,7 @@ some task on the game thread. These should be kept as light as possible so as to
 stall the client and force a disconnect.
 
 Snowshoes provides a basic GUI with an output console and some Play/Pause/Stop buttons. 
-Note that these buttons do not immediately halt the script, rather they signal to well-
-behaved sherpas that the user wants them to stop. This could happen after your bot is 
-done a run, or if you want you can pause in arbitrary places.
+At the moment Pause does the same thing as Stop. Sorry 'bout that.
 
 I chose the name Snowshoes because they help you through a Blizzard :)
 

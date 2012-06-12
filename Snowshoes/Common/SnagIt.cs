@@ -95,7 +95,7 @@ namespace Snowshoes.Common
         public static bool CheckItemSell(Unit unit)
         {
             return !unit.Name.Contains("Book ") // crafting materials
-                   && !unit.Name.Contains("Tome")
+                   && !unit.Name.Contains("Tome ")
                    && !unit.Name.Contains("Plan")
                    && !unit.Name.Contains("Essence")
                    && !unit.Name.Contains("Tear")
