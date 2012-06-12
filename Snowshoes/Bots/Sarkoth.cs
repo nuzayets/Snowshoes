@@ -29,13 +29,13 @@ namespace Snowshoes.Bots
         private static bool IsInventoryStuffed()
         {
             return
-                GetBool(() => Me.GetContainerItems(Container.Inventory).Sum(item => item.ItemSizeX*item.ItemSizeY) >= 40);
+                GetBool(() => Me.GetContainerItems(Container.Inventory).Sum(item => item.ItemSizeX * item.ItemSizeY) >= 40);
         }
 
         private static void TownRun()
         {
             if (!NeedsRepair() && !IsInventoryStuffed()) return;
-            
+
             GoTown();
 
             SnagIt.IdentifyAll();
@@ -77,16 +77,16 @@ namespace Snowshoes.Bots
             {
                 case SNOActorId.Barbarian_Male:
                 case SNOActorId.Barbarian_Female:
-                    throw new NotImplementedException();
-                    //break;
+                    if (!BarbarianCellarRun()) return;
+                    break;
                 case SNOActorId.WitchDoctor_Male:
                 case SNOActorId.WitchDoctor_Female:
                     throw new NotImplementedException();
-                    //break;
+                //break;
                 case SNOActorId.Wizard_Male:
                 case SNOActorId.Wizard_Female:
                     throw new NotImplementedException();
-                    //break;
+                //break;
                 case SNOActorId.Demonhunter_Male:
                 case SNOActorId.Demonhunter_Female:
                     if (!DemonHunterCellarRun()) return;
@@ -94,19 +94,19 @@ namespace Snowshoes.Bots
                 case SNOActorId.Monk_Male:
                 case SNOActorId.Monk_Female:
                     throw new NotImplementedException();
-                    //break;
+                //break;
             }
-            
+
 
             SnagIt.SnagItems();
 
 
-            Snowshoes.Print(string.Format("Collected {0}k!", Math.Round((GetData(() => Me.Gold) - goldStart)/1000m, 1)));
-            var srunTime = Math.Round((Environment.TickCount - ticks)/1000m, 0);
+            Snowshoes.Print(string.Format("Collected {0}k!", Math.Round((GetData(() => Me.Gold) - goldStart) / 1000m, 1)));
+            var srunTime = Math.Round((Environment.TickCount - ticks) / 1000m, 0);
             _successes.Add(srunTime);
             Snowshoes.Print(String.Format("{0} secs success run ({1} avg); {2}% rate ({3}/{4})", srunTime,
                                           Math.Round(_successes.Average()),
-                                          Math.Round((_successes.Count/(_failures.Count + (decimal) _successes.Count))*
+                                          Math.Round((_successes.Count / (_failures.Count + (decimal)_successes.Count)) *
                                                      100m),
                                           _successes.Count, _successes.Count + _failures.Count));
         }
@@ -147,17 +147,53 @@ namespace Snowshoes.Bots
             return true;
         }
 
+        private bool BarbarianCellarRun()
+        {
+            WaitFor(() => Me.UsePower(SNOPowerId.Barbarian_WarCry));
+            WaitFor(() => Me.UsePower(SNOPowerId.Barbarian_Sprint));
+
+            Walk(2026.3f, 2557.1f);
+
+            Thread.Sleep(Game.Ping * 2);
+            Unit cellar = CheckForCellar();
+            if (cellar == null) return false;
+
+            Walk(2046.2f, 2527.7f);
+
+            WaitFor(() => Me.UsePower(SNOPowerId.Barbarian_Sprint));
+            Walk(2078.7f, 2492f);
+
+            Walk(2066, 2477);
+
+            Interact(cellar);
+            PerformAction(() => Me.UsePower(SNOPowerId.Barbarian_Sprint)); // this is for if we happen to have enough fury for a third sprint (fury regen rune)
+
+            Walk(125.8f, 160f);
+
+            Walk(122.4f, 143f);
+
+            TownRun();
+
+            WaitFor(() => Me.UsePower(SNOPowerId.Barbarian_Leap, 120, 95, Me.Z));
+            Thread.Sleep(150); // air time for leap
+            WaitFor(() => Me.UsePower(SNOPowerId.Barbarian_ThreateningShout));
+            WaitFor(() => Me.UsePower(SNOPowerId.Barbarian_Earthquake));
+            KillAll();
+            WaitFor(() => Me.UsePower(SNOPowerId.Barbarian_Sprint));
+            return true;
+        }
+
         private Unit CheckForCellar()
         {
             var cellar = GetData(() => Unit.Get().FirstOrDefault(u => u.Name.Contains("Dank Cellar")));
             if (cellar == default(Unit))
             {
-                var runTime = Math.Round((Environment.TickCount - ticks)/1000m, 0);
+                var runTime = Math.Round((Environment.TickCount - ticks) / 1000m, 0);
                 _failures.Add(runTime);
                 Snowshoes.Print(String.Format("{0} secs failure run ({1} avg); {2}% success rate", runTime,
                                               Math.Round(_failures.Average()),
-                                              Math.Round((_successes.Count/
-                                                          (_failures.Count + (decimal) _successes.Count))*
+                                              Math.Round((_successes.Count /
+                                                          (_failures.Count + (decimal)_successes.Count)) *
                                                          100m)));
                 ExitGame();
                 return null;
