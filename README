@@ -1,0 +1,20 @@
+Snowshoes
+
+Snowshoes is a framework for writing bots for D3 using D3Advanced (D3Advanced.com). 
+It is modular and thread-safe and provides convenience functions for many common tasks. 
+The basic unit of execution in Snowshoes is a Sherpa. This is basically a thread that
+completes common tasks - the main sherpa should contain the linear path for the bot to
+follow, and others do helpful tasks like monitor the main sherpa for hangups/delays, 
+track your gold and check if you have died.
+
+The most important thing to remember is that any calls to the D3 API must happen
+on the game thread, and to facilitate that there are many functions that will perform
+some task on the game thread. These should be kept as light as possible so as to not
+stall the client and force a disconnect.
+
+Snowshoes provides a basic GUI with an output console and some Play/Pause/Stop buttons. 
+At the moment Pause does the same thing as Stop. Sorry 'bout that.
+
+I chose the name Snowshoes because they help you through a Blizzard :)
+
+Enjoy.

@@ -46,4 +46,4 @@
 *.vbproj text=auto merge=union 
 *.fsproj text=auto merge=union 
 *.dbproj text=auto merge=union 
-*.sln text=auto eol=crlf merge=union 
+*.sln text=auto eol=crlf merge=union
