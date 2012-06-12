@@ -29,8 +29,7 @@ namespace Snowshoes.Common
                 {
                     case SNOActorId.Barbarian_Male:
                     case SNOActorId.Barbarian_Female:
-                        //return Classes.Barbarian.AttackUnit(unit, timeout);
-                        break;
+                        return Classes.Barbarian.AttackUnit(unit, timeout);
                     case SNOActorId.WitchDoctor_Male:
                     case SNOActorId.WitchDoctor_Female:
                         //return Classes.WitchDoctor.AttackUnit(unit, timeout);
