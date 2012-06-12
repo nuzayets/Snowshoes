@@ -57,10 +57,14 @@ namespace Snowshoes.Common
         public static bool CheckItemStash(Unit i)
         {
             return i.ItemQuality >= UnitItemQuality.Rare4
-                   || i.Name.Contains("Topaz (30)") || i.Name.Contains("Amethyst (30)") ||
-                   i.Name.Contains("Emerald (30)") || i.Name.Contains("Ruby (30)")
-                   || i.Name.Contains("Essence (100)") || i.Name.Contains("Tear (100)") || i.Name.Contains("Hoof (100)") ||
-                   i.Name.Contains("Plan");
+                   || i.Name.Contains("Topaz (30)")
+                   || i.Name.Contains("Amethyst (30)")
+                   || i.Name.Contains("Emerald (30)")
+                   || i.Name.Contains("Ruby (30)")
+                   || i.Name.Contains("Essence (100)")
+                   || i.Name.Contains("Tear (100)")
+                   || i.Name.Contains("Hoof (100)")
+                   || i.Name.Contains("Plan");
         }
 
         public static bool CheckItemSnag(Unit unit)
@@ -114,7 +118,7 @@ namespace Snowshoes.Common
                     UIElement.Get().Where(x => x.Name.Contains("Root.NormalLayer.vendor_dialog_mainPage.salvage_dialog")).
                         FirstOrDefault());
             if (salvgUI == null || !salvgUI.Visible) return;
-            
+
 
             foreach (
                 var item in
@@ -135,9 +139,9 @@ namespace Snowshoes.Common
                     Sherpa.GetData(() => Me.GetContainerItems(Container.Inventory)).Where(CheckItemSell))
             {
                 var i = item;
-// ReSharper disable ConvertClosureToMethodGroup
+                // ReSharper disable ConvertClosureToMethodGroup
                 Sherpa.PerformAction(() => i.SellItem());
-// ReSharper restore ConvertClosureToMethodGroup
+                // ReSharper restore ConvertClosureToMethodGroup
                 Thread.Sleep(50);
             }
         }
