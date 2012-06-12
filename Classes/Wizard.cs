@@ -48,7 +48,7 @@ namespace Snowshoes.Classes
 
 
 
-        public static bool MoveSuperFuckingFast(float x, float y)
+        public static bool TeleportTo(float x, float y)
         {
             while (Sherpa.GetDistance(x,y) > 10)
             {
