@@ -37,8 +37,7 @@ namespace Snowshoes.Common
                         break;
                     case SNOActorId.Wizard_Male:
                     case SNOActorId.Wizard_Female:
-                        return Classes.Wizard.AttackUnit(unit, timeout);
-                        break;
+                        return Wizard.AttackUnit(unit, timeout);
                     case SNOActorId.Demonhunter_Male:
                     case SNOActorId.Demonhunter_Female:
                         return DemonHunter.AttackUnit(unit, timeout);

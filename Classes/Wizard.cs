@@ -16,7 +16,7 @@ namespace Snowshoes.Classes
 
         public static readonly Spell DiamondSkin = new Spell(SNOPowerId.Wizard_DiamondSkin, 0, 15);
         public static readonly Spell Teleport = new Spell(SNOPowerId.Wizard_Teleport, 0, 0);
-        public static readonly Spell Familiar = new Spell(Wizard_Familiar, 0, 240);
+        public static readonly Spell Familiar = new Spell(SNOPowerId.Wizard_Familiar, 0, 240);
         public static readonly Spell MagicWeapon = new Spell(SNOPowerId.Wizard_MagicWeapon, 0, 300);
 
 

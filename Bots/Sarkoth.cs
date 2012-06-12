@@ -117,7 +117,7 @@ namespace Snowshoes.Bots
                 case SNOActorId.Wizard_Male:
                 case SNOActorId.Wizard_Female:
                     if (!WizardCellarRun()) return;
-                    //break;
+                    break;
                 case SNOActorId.Demonhunter_Male:
                 case SNOActorId.Demonhunter_Female:
                     if (!DemonHunterCellarRun()) return;
@@ -162,7 +162,7 @@ namespace Snowshoes.Bots
             WaitFor(() => Me.UsePower(SNOPowerId.Wizard_Familiar));
             WaitFor(() => Me.UsePower(SNOPowerId.Wizard_MagicWeapon));
 
-            Walk(122.7955f, 154.2372f));
+            Walk(122.7955f, 154.2372f);
 
             KillAll();
             TownWalk();
