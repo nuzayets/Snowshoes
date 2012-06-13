@@ -60,6 +60,7 @@ namespace Snowshoes.Common
                    || i.Name.Contains("Topaz (30)") || i.Name.Contains("Amethyst (30)") ||
                    i.Name.Contains("Emerald (30)") || i.Name.Contains("Ruby (30)")
                    || i.Name.Contains("Essence (100)") || i.Name.Contains("Tear (100)") || i.Name.Contains("Hoof (100)") ||
+                   i.Name.Contains("Fiery Brimstone") ||
                    i.Name.Contains("Plan");
         }
 
